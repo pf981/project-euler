@@ -279,3 +279,18 @@ def prime_factors(n):
             if n > 1: factors.append(int(n))
             break
     return factors
+
+def prime_factors_range(start, stop=None):
+    # parse input options
+    if not stop:
+        stop = start
+        start = 0
+    else:
+        start = start
+        stop = stop
+
+    factors = {}
+    for key in range(start, stop):
+        factors[key] = prime_factors(key)
+
+    return factors
