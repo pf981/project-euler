@@ -4,7 +4,7 @@ from operator import mul
 
 from helpers import primes
 
-RANGE_MAX = 11
+RANGE_MAX = 21
 
 
 # This function is unused
