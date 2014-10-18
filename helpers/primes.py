@@ -294,3 +294,9 @@ def prime_factors_range(start, stop=None):
         factors[key] = prime_factors(key)
 
     return factors
+
+# Taken from http://stackoverflow.com/questions/18833759/python-prime-number-checker
+def is_prime(n):
+    if n % 2 == 0 and n > 2:
+        return False
+    return all(n % i for i in range(3, int(math.sqrt(n)) + 1, 2))
