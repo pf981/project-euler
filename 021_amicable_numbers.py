@@ -4,6 +4,7 @@ from helpers import helpers
 MAX_RANGE = 10000
 
 def d(n):
+    # Sibtract n so we exclude n as a factor
     return sum(helpers.factors(n)) - n
 
 def main():
