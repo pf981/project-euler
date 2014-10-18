@@ -1,6 +1,7 @@
 import itertools
 from functools import reduce
 from operator import mul
+#from math import pow
 
 from helpers import primes
 
@@ -27,6 +28,11 @@ def main():
     print(factors_counts)
 
 
+    all_factors_of_answer = [pow(factor, factors_counts[factor]) for factor in factors_counts]
+    print(all_factors_of_answer)
+    answer = reduce(mul, all_factors_of_answer, 1)
+
+    print(answer)
 
 #    for vals in p.factors.values():
 #    for vals in p.factors:
