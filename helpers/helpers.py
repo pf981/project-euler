@@ -1,3 +1,4 @@
+import itertools
 from functools import reduce
 from operator import mul
 
@@ -63,13 +64,13 @@ def int_to_digits(num):
     """
     return (int(i) for i in str(num))
 
-def fibonacci(num_to_generate):
-    prev = 0
-    cur = 1
-    for _ in range(num_to_generate):
-        yield cur
-        cur = cur + prev
-        prev = cur
+def fibonacci(start_index, end_index=None):
+    if not end_index:
+        end_index = start_index
+        start_index = 0
+    return itertools.islice(helpers.fibonacci(), 10)
+
+
 
 def fibonacci():
     prev = 0
