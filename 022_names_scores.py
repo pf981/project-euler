@@ -1,3 +1,5 @@
+# To get p022_names.txt use
+# $ wget http://projecteuler.net/project/resources/p022_names.txt
 import re
 
 def score_name(name, index):
