@@ -39,8 +39,6 @@ TENS_WORDS = {
     }
 
 
-
-
 def letters(num):
     if num == 1000:
         return len("one") + len("thousand")
@@ -82,37 +80,37 @@ def int_to_words(num):
 
     words = ""
 
+    # Hundreds
+    if num >= 100:
+        words += ONES_WORDS[int(str(num)[-3:-2])] + " hundred"
+
+        # And?
+        if int(str(num)[-2:]) > 0:
+            words += " and"
+
     # If we are dealing with 10-19
-    if int(str(num)[-2:-1]) == 1:
-        total += len(ONES_WORDS[int(str(num)[-2:])])
+    if num >= 10 and int(str(num)[-2:-1]) == 1:
+        words += ONES_WORDS[int(str(num)[-2:])]
     else:
+         # Tens
+        if num >= 10:
+            words += " "
+            words += TENS_WORDS[int(str(num)[-2:-1])]
+
         # Ones
+        words += " "
         words += ONES_WORDS[int(str(num)[-1:])]
 
-        if num < 10:
-            return words
-
-         # Tens
-        total += len(TENS_WORDS[int(str(num)[-2:-1])])
-
-    if num < 100:
-        return total
-
-    # Hundreds
-    total += len(ONES_WORDS[int(str(num)[-3:-2])]) + len("hundred")
-
-    # And?
-    if int(str(num)[-2:]) > 0:
-        total += len("and")
-
-    return total
+    # Remove the leading whitespace
+    return words.lstrip(" ")
 
 
 def main():
 #    for num in range(1, UPPER + 1):
-#        print(int_to_words(num))
+#        print(int_to_words(num).replace(" ", ""))
 
-    answer = sum(letters(num) for num in range(1, UPPER + 1))
+    answer = sum(len(int_to_words(num).replace(" ", "")) for num in range(1, UPPER + 1))
+#    answer = sum(letters(num) for num in range(1, UPPER + 1))
     print(answer)
 
 if __name__ == '__main__':
