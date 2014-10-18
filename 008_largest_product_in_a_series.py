@@ -1,7 +1,7 @@
 from functools import reduce
 from operator import mul
 
-WIDTH = 4
+WIDTH = 13
 
 DIGITS = "73167176531330624919225119674426574742355349194934" \
          "96983520312774506326239578318016984801869478851843" \
@@ -29,9 +29,9 @@ def main():
     int_list = [int(x) for x in DIGITS]
 
     answer = 0
-    # For each 13 wide sublist
-    for i in range(len(int_list) - WIDTH + 1):
-        product = reduce(mul, int_list[i:i + WIDTH], 1)
+    # For each WIDTH wide sublist
+    for sublist in [int_list[i:i+WIDTH] for i in range(len(int_list) - WIDTH)]:
+        product = reduce(mul, sublist, 1)
         answer = max(product, answer)
 
     print(answer)
