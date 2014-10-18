@@ -1,11 +1,17 @@
 from functools import reduce
 from operator import mul
 
+def all_fixed_length_sublists(arr, width):
+    return (sublist for sublist in [arr[i:i+width] for i in range(len(arr) - width)])
+
+def flatten(nested_lists):
+    return list(itertools.chain(*nested_list))
+
 def product(num_list):
     """
     Returns the product of each element of the list, similar to sum(num_list)
     """
-    answer = reduce(mul, num_list, 1)
+    return reduce(mul, num_list, 1)
 
 def prime_factors_range(start, stop=None):
     # parse input options
