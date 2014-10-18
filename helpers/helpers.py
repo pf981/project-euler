@@ -13,6 +13,22 @@ def product(num_list):
     """
     return reduce(mul, num_list, 1)
 
+def prime_factors(n):
+    """
+    Returns all the prime factors of a positive integer
+    """
+    factors = []
+    d = 2
+    while n > 1:
+        while n % d == 0:
+            factors.append(d)
+            n /= d
+        d = d + 1
+        if d*d > n:
+            if n > 1: factors.append(int(n))
+            break
+    return factors
+
 def prime_factors_range(start, stop=None):
     # parse input options
     if not stop:
@@ -27,6 +43,13 @@ def prime_factors_range(start, stop=None):
         factors[key] = prime_factors(key)
 
     return factors
+
+def factors(n):
+    """
+    Returns all factors, including composite factors
+    """
+    return set(reduce(list.__add__,
+                      ([i, n//i] for i in range(1, int(n**0.5) + 1) if n % i == 0)))
 
 # Taken from http://stackoverflow.com/questions/18833759/python-prime-number-checker
 def is_prime(n):
