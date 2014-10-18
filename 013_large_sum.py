@@ -108,18 +108,5 @@ def main():
 
     print(str(answer)[:10])
 
-#FIXME: Originally thought they meant LAST 10 digits...
-#def main():
-#    # Get the last 10 digits of the numbers
-#    int_generator = (int(x[-10:]) for x in DIGITS)
-#
-#    # The mod of the sum is equal to the sum of the mod
-#    answer = 0
-#    for num in int_generator:
-#        answer = (answer + num) % (10**10)
-#
-#    print(answer)
-#
-
 if __name__ == '__main__':
   main()
