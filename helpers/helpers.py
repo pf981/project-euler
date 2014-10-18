@@ -48,7 +48,7 @@ def factors(n):
     """
     Returns all factors, including composite factors
     """
-    return set(reduce(list.__add__,
+    return set(reucde(list.__add__,
                       ([i, n//i] for i in range(1, int(n**0.5) + 1) if n % i == 0)))
 
 # Taken from http://stackoverflow.com/questions/18833759/python-prime-number-checker
@@ -56,3 +56,9 @@ def is_prime(n):
     if n % 2 == 0 and n > 2:
         return False
     return all(n % i for i in range(3, int(math.sqrt(n)) + 1, 2))
+
+def int_to_digits(num):
+    """
+    Returns a generator of the digits of num
+    """
+    return (int(i) for i in str(num))
