@@ -1,6 +1,3 @@
-import itertools
-from helpers import helpers
-
 DIGITS = ['37107287533902102798797998220837590246510135740250',
          '46376937677490009712648124896970078050417018260538',
          '74324986199524741059474233309513058123726617309629',
@@ -103,19 +100,26 @@ DIGITS = ['37107287533902102798797998220837590246510135740250',
          '53503534226472524250874054075591789781264330331690']
 
 def main():
-    # Get the last 10 digits of the numbers
-    int_generator = (int(x[-10:]) for x in DIGITS)
-#    print(next(int_generator))
-#    int_generator = (int(x) for x in DIGITS)
+    int_generator = (int(x) for x in DIGITS)
 
-    # The mod of the sum is equal to the sum of the mod
     answer = 0
     for num in int_generator:
-#        print(num % (10**10))
-        answer = (answer + num) % (10**10)
+        answer += num
 
-    print(answer)
+    print(str(answer)[:10])
 
+#FIXME: Originally thought they meant LAST 10 digits...
+#def main():
+#    # Get the last 10 digits of the numbers
+#    int_generator = (int(x[-10:]) for x in DIGITS)
+#
+#    # The mod of the sum is equal to the sum of the mod
+#    answer = 0
+#    for num in int_generator:
+#        answer = (answer + num) % (10**10)
+#
+#    print(answer)
+#
 
 if __name__ == '__main__':
   main()
