@@ -1,3 +1,4 @@
+# FIXME: Probably better to use numpy
 import itertools
 from helpers import helpers
 
@@ -34,8 +35,9 @@ def get_diagonals(matrix, length):
             yield diagonal
 
 def get_verticles(matrix, length):
-#    for row in matrix:
-    return []
+#    for col_index, _ in enumerate(matrix):
+    transposed = zip(*matrix)
+    return get_horizontals(transposed, length)
 
 
 def get_horizontals(matrix, length):
