@@ -34,22 +34,36 @@ def get_diagonals(matrix, length):
             diagonal = [matrix[row + i][col + i] for i in range(LENGTH)]
             yield diagonal
 
+def get_reverse_diagonals(matrix, length):
+#    transposed = list(zip(*matrix))
+    transposed = []
+    for row in matrix:
+        transposed.append(list(reversed(row)))
+#    return get_diagonals(list(transposed), length)
+    return get_diagonals(transposed, length)
+
 def get_verticles(matrix, length):
 #    for col_index, _ in enumerate(matrix):
-    transposed = zip(*matrix)
-    return get_horizontals(transposed, length)
+    # This doesn't work
+    transposed = list(zip(*matrix))
+#    print(list(transposed))
+#    return get_horizontals(transposed, length)
+    return get_horizontals(list(transposed), length)
 
 
 def get_horizontals(matrix, length):
+#    print(matrix)
     for row in matrix:
         return helpers.all_fixed_length_sublists(row, length)
 
 def main():
     # Find the diagonal with the greatest product
     all_sublists = itertools.chain(
-        get_diagonals(GRID, LENGTH),
-        get_horizontals(GRID, LENGTH),
-        get_verticles(GRID, LENGTH))
+#        get_diagonals(GRID, LENGTH),
+        get_reverse_diagonals(GRID, LENGTH),
+#        get_horizontals(GRID, LENGTH),
+#        get_verticles(GRID, LENGTH))
+        )
 
     biggest_sublist = max(all_sublists, key=lambda x: helpers.product(x))
 
