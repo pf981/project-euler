@@ -62,3 +62,22 @@ def int_to_digits(num):
     Returns a generator of the digits of num
     """
     return (int(i) for i in str(num))
+
+def fibonacci(num_to_generate):
+    prev = 0
+    cur = 1
+    for _ in range(num_to_generate):
+        yield cur
+        cur = cur + prev
+        prev = cur
+
+def fibonacci():
+    prev = 0
+    cur = 1
+    while True:
+        yield cur
+        cur += prev
+        prev = cur - prev
+
+def get_nth_fibonacci(n):
+    return next((val for i, val in enumerate(fibonacci()) if i == n - 1))
