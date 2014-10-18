@@ -13,6 +13,9 @@ ONES_WORDS = {
     7: "seven",
     8: "eight",
     9: "nine",
+    }
+
+TEN_TO_NINETEEN_WORDS = {
     10: "ten",
     11: "eleven",
     12: "twelve",
@@ -39,38 +42,6 @@ TENS_WORDS = {
     }
 
 
-def letters(num):
-    if num == 1000:
-        return len("one") + len("thousand")
-
-    total = 0
-
-    # If we are dealing with 10-19
-    if num >= 10 and int(str(num)[-2:-1]) == 1:
-        total += len(ONES_WORDS[int(str(num)[-2:])])
-    else:
-        # Ones
-        total += len(ONES_WORDS[int(str(num)[-1:])])
-
-        if num < 10:
-            return total
-
-        # Tens
-        total += len(TENS_WORDS[int(str(num)[-2:-1])])
-
-    if num < 100:
-        return total
-
-    # Hundreds
-    total += len(ONES_WORDS[int(str(num)[-3:-2])]) + len("hundred")
-
-    # And?
-    if int(str(num)[-2:]) > 0:
-        total += len("and")
-
-    return total
-
-
 def int_to_words(num):
     """
     Returns a string representation of the number
@@ -90,7 +61,7 @@ def int_to_words(num):
 
     # If we are dealing with 10-19
     if num >= 10 and int(str(num)[-2:-1]) == 1:
-        words += ONES_WORDS[int(str(num)[-2:])]
+        words += TEN_TO_NINETEEN_WORDS[int(str(num)[-2:])]
     else:
          # Tens
         if num >= 10:
@@ -106,11 +77,8 @@ def int_to_words(num):
 
 
 def main():
-#    for num in range(1, UPPER + 1):
-#        print(int_to_words(num).replace(" ", ""))
-
     answer = sum(len(int_to_words(num).replace(" ", "")) for num in range(1, UPPER + 1))
-#    answer = sum(letters(num) for num in range(1, UPPER + 1))
+
     print(answer)
 
 if __name__ == '__main__':
