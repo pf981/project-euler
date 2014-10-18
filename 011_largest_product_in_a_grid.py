@@ -34,8 +34,9 @@ def get_diagonals(matrix, length):
             yield diagonal
 
 def get_verticles(matrix, length):
-    for row in matrix:
-        pass
+#    for row in matrix:
+    return []
+
 
 def get_horizontals(matrix, length):
     for row in matrix:
@@ -45,7 +46,8 @@ def main():
     # Find the diagonal with the greatest product
     all_sublists = itertools.chain(
         get_diagonals(GRID, LENGTH),
-        get_horizontals(GRID, LENGTH))
+        get_horizontals(GRID, LENGTH),
+        get_verticles(GRID, LENGTH))
 
     biggest_sublist = max(all_sublists, key=lambda x: helpers.product(x))
 
