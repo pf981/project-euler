@@ -1,23 +1,11 @@
+# FIXME: This gives 170, rather than 171
 from datetime import date, timedelta
-
-# FIXME: This doesn't work
-# def main():
-#     start_date = date(1901, 1, 1)
-#     end_date = date(2000, 12, 31)
-#     while start_date.strftime("%A") != "Sunday":
-#         start_date += timedelta(days=1)
-
-#     days_between = (end_date - start_date).days
-#     answer = int(days_between / 7)
-#     print(answer)
 
 days_in = {month: 31 for month in range(1, 13)}
 days_in[9] = 30 # September
 days_in[4] = 30 # April
 days_in[6] = 30 # May
 days_in[11] = 30 # and November
-#days_in = [31] * 12
-#days_in[
 
 def finished_month(cur_date):
     # February
@@ -59,15 +47,13 @@ def main():
         tomorrow(cur_date)
         day_name = (day_name + 1) % 7
 
-    print(cur_date)
-
     answer = 0
+    print(cur_date, day_name)
     while cur_date != end_date:
-        if day_name == 0:
+        if day_name == 0 and cur_date["day"] == 1:
             answer += 1
         tomorrow(cur_date)
         day_name = (day_name + 1) % 7
-
 
     print(cur_date)
     print(answer)
