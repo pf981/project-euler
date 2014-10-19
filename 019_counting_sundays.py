@@ -6,9 +6,10 @@ def main():
     while start_date.strftime("%A") != "Sunday":
         start_date += timedelta(days=1)
 #    print(start_date.strftime("%A"))
-    days_between = (end_date - start_date).days
-    print(days_between)
-    answer = int(days_between / 7)
+#    days_between = (end_date - start_date).days
+#    print(days_between)
+#    answer = int(days_between / 7)
+    answer = (end_date - start_date).weeks
     print(answer)
 
 
