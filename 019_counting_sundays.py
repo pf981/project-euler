@@ -32,7 +32,6 @@ def finished_month(cur_date):
     return cur_date["day"] < days_in[cur_date["month"]]
 
 def tomorrow(cur_date):
-    cur_date["day_name"] = (cur_date["day_name"] + 1) % 7
     cur_date["day"] += 1
 
     # Handle the end of the month
@@ -49,19 +48,26 @@ def tomorrow(cur_date):
 
 
 def main():
+    cur_date = {"day" : 1, "month": 1, "year": 1900}
+    start_date = {"day" : 1, "month": 1, "year": 1901}
+    end_date = {"day" : 1, "month": 1, "year": 2000}
+
     # day_name == 0 => sunday
-    cur_date = {"day" : 1, "month": 1, "year": 1900, "day_name": 0}
-    start_date = {"day" : 1, "month": 1, "year": 1901, "day_name": 0}
-    end_date = {"day" : 1, "month": 1, "year": 2000, "day_name": 0}
+    day_name = 0
 
     while cur_date != start_date:
         tomorrow(cur_date)
+        day_name = (day_name + 1) % 7
+
     print(cur_date)
+
     answer = 0
     while cur_date != end_date:
-        if cur_date["day"] == 0:
+        if day_name == 0:
             answer += 1
         tomorrow(cur_date)
+        day_name = (day_name + 1) % 7
+
 
     print(cur_date)
     print(answer)
