@@ -12,7 +12,7 @@ def get_abundant_numbers():
     return [n for n in range(12, 28124) if is_abundant(n)]
 
 # HACK
-abundant_numbers = get_abundant_numbers()
+
 
 def is_sum_of_abundant(n):
     for abundant1 in abundant_numbers:
@@ -26,14 +26,34 @@ def is_sum_of_abundant(n):
     return False
 
 def main():
+    abundant_numbers = get_abundant_numbers()
+
+    sums_of_abundant_pairs = set()
+
+    # Compute all sums of abundant numbers
+    for abundant1 in abundant_numbers:
+        for abundant2 in abundant_numbers:
+            sum_of_abundant = abundant1 + abundant2
+            if sum_of_abundant > 28123:
+                break
+            sums_of_abundant_pairs.add(sum_of_abundant)
+
+    not_sum_of_abundants = set(range(1, 28123)) - sums_of_abundant_pairs
+    answer = sum(not_sum_of_abundants)
+    print(answer)
+
+#            print(sum_of_abundant)
+
+#    print(sums_of_abundant_pairs)
+
 #    print(get_abundant_numbers())
-    not_sum_of_abundants = [n for n in range(1, 28123) if not is_sum_of_abundant(n)]
+#    not_sum_of_abundants = [n for n in range(1, 28123) if not is_sum_of_abundant(n)]
 #    print(is_sum_of_abundant(24))
 #    not_sum_of_abundants = [n for n in range(1, 30) if not is_sum_of_abundant(n)]
 
-    print(not_sum_of_abundants)
-    answer = sum(not_sum_of_abundants)
-    print(answer)
+#    print(not_sum_of_abundants)
+#    answer = sum(not_sum_of_abundants)
+#    print(answer)
 #    abundant_numbers = get_abundant_numbers()
 #    print(helpers.factors(28))
 #    print(is_abundant(28))
