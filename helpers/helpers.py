@@ -5,7 +5,7 @@ from operator import mul
 def all_fixed_length_sublists(arr, width):
     return (sublist for sublist in [arr[i:i+width] for i in range(len(arr) - width)])
 
-def flatten(nested_lists):
+def flatten(nested_list):
     return list(itertools.chain(*nested_list))
 
 def product(num_list):
@@ -82,3 +82,9 @@ def fibonacci():
 
 def get_nth_fibonacci(n):
     return next((val for i, val in enumerate(fibonacci()) if i == n - 1))
+
+def get_nth_element_of_generator(generator, n):
+    """
+    Returns same value as list(generator)[n]
+    """
+    return next(itertools.islice(generator, n, n + 1))
