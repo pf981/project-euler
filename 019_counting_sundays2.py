@@ -6,14 +6,14 @@ def main():
 
     # Start on the first sunday
     cur_date = start_date
-    while cur_date.strftime("%A") != "Sunday":
-        cur_date += timedelta(days=1)
 
     answer = 0
     while cur_date != end_date:
-        cur_date += timedelta(days=1)
-        if cur_date.strftime("%A") == "Sunday" and cur_date.month == 1:
+        if cur_date.strftime("%A") == "Sunday" and cur_date.day == 1:
+            print(cur_date)
             answer += 1
+
+        cur_date += timedelta(days=1)
 
     print(answer)
 
