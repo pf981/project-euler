@@ -1,4 +1,5 @@
 import itertools
+import re
 from functools import reduce
 from operator import mul
 
@@ -88,3 +89,8 @@ def get_nth_element_of_generator(generator, n):
     Returns same value as list(generator)[n]
     """
     return next(itertools.islice(generator, n, n + 1))
+
+def get_million_primes():
+    with open("helpers/primes.txt") as in_file:
+        text = in_file.read()
+    return [int(p) for p in re.findall("(\d+)", text)]
