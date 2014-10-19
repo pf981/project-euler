@@ -16,11 +16,11 @@ import itertools
 # order such that (10**order - 1) % n == 0
 
 def recurring_length(n):
-    # Find exponent such that n % (10**exponent - 1) == 0
-#    order = 0
+    # Find exponent such that (10**exponent - 1) % n == 0
+
     for order in range(1, n):
         # Can optimize this exponentiation by keeping track of old exponents
-        print(n, order, (10**order - 1 ) % 7)
+#        print(n, order, (10**order - 1 ) % 7)
         if (10**order - 1) % n == 0:
 #            print("@@", order)
             return order
@@ -28,10 +28,12 @@ def recurring_length(n):
     # This is a bad way of doing it - the ones that don't recur will take the longest
 
 def main():
+#    answer = max((d for d in range(1, 10, 2)), key=lambda x: recurring_length(x))
+    answer = max((d for d in range(7, 1000, 2)), key=lambda x: recurring_length(x))
     # Only odd numbers can be recurring
-    for d in range(7, 1000, 2):
-        pass
-    answer = recurring_length(7)
+#    for d in range(7, 1000, 2):
+#        pass
+#    answer = recurring_length(7)
     print(answer)
 
 if __name__ == '__main__':
