@@ -1,3 +1,4 @@
+# FIXME: This is too inefficient (and buggy)
 import collections
 
 DESIRED_TOTAL = 200
@@ -32,9 +33,11 @@ def generate_coin_combinations(total):
             # This is a valid combination
             yield current_combination
 
-            # Continue backtracking
+            # Continue backtracking # FIXME: Nothing is stopping it continuously adding back the same coin...
             current_sum -= coin
+            current_combination[coin] -= 1
 
+        # FIXME: Nothing is stopping this from becoming backtrack_stack = [COINS[0]] again?
         # Attempt to add other coins
         for new_coin in COINS:
             backtrack_stack.append(new_coin)
@@ -44,13 +47,13 @@ def generate_coin_combinations(total):
 
 
 def main():
-#    coin_combinations = list(generate_coin_combinations(DESIRED_TOTAL))
+    coin_combinations = list(generate_coin_combinations(DESIRED_TOTAL))
     # coin_combinations = list(generate_coin_combinations(DESIRED_TOTAL))
     # print(coin_combinations)
-    for combination in generate_coin_combinations(DESIRED_TOTAL):
-        print(combination, sum(coin * value for coin, value in combination.items()))
-    # answer = len(coin_combinations)
-    # print(answer)
+    # for combination in generate_coin_combinations(DESIRED_TOTAL):
+    #     print(combination, sum(coin * value for coin, value in combination.items()))
+    answer = len(coin_combinations)
+    print(answer)
 
 
 if __name__ == '__main__':
