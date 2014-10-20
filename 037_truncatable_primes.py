@@ -12,8 +12,6 @@ def get_truncations(num):
         yield int(string[-i:])
 
 def main():
-    # print(3797)
-    # print(list(get_truncations(3797)))
     primes = helpers.get_million_primes()
     truncatable_primes = []
 
