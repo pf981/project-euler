@@ -30,10 +30,8 @@ def main():
     for target in range(DESIRED_TOTAL + 1):
         ways_to_form[target, 0] = 1
 
-#    for target in range(1, DESIRED_TOTAL + 1):
     for target in range(DESIRED_TOTAL + 1):
         for coin_index, coin in enumerate(COINS[1:], start=1):
-#            print("@", coin, target, "!")
             # If the coin cannot fit in the target
             if coin > target:
                 # The ways to form will be no different than the ways to form
@@ -46,8 +44,6 @@ def main():
 
                 # AND the number of ways when using this coin
                 ways_to_form[target, coin_index] += ways_to_form[target - coin, coin_index]
- #               print("FITS", ways_to_form[target, coin_index])
-
 
     # Generate and print the table
     print_table(ways_to_form)
