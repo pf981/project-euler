@@ -46,6 +46,7 @@ def main():
                 ways_to_form[target, coin_index] += ways_to_form[target - coin, coin_index]
 
     # Generate and print the table
+    print("Ways to form target using coins lass than or equal to a value")
     print_table(ways_to_form)
 
     # The solution is the number of ways to form 200 using all the coins less
