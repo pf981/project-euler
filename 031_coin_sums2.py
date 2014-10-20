@@ -5,7 +5,10 @@ DESIRED_TOTAL = 200
 COINS = [1, 2, 5, 10, 20, 50, 100, 200]
 
 def print_table(ways_to_form):
-    table = prettytable.PrettyTable(["Target"] + COINS)
+    header = ["<=" + str(coin) for coin in COINS]
+    header = ["Target"] + header
+    table = prettytable.PrettyTable(header)
+
     for target in range(10):
         row_data = [ways_to_form[target, coin_index] for coin_index, _ in enumerate(COINS)]
         table.add_row([target] + row_data)
@@ -52,7 +55,7 @@ def main():
     # The solution is the number of ways to form 200 using all the coins less
     # than or equal to 200
     answer = ways_to_form[DESIRED_TOTAL, len(COINS) - 1]
-    print(answer)
+    print("Answer is", answer)
 
 
 if __name__ == '__main__':
