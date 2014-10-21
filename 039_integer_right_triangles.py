@@ -9,6 +9,7 @@ def generate_triples(max_side):
     """
     for a in range(1, max_side):
         for b in range(a, max_side):
+            # If a^2 + b^2 is a perfect square, then this triple is valid
             c_double = math.sqrt(a*a + b*b)
             c = int(c_double)
             if c == c_double:
