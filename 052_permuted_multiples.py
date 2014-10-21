@@ -1,7 +1,3 @@
-# This version is approximately three times faster than v1 just by using
-#  sorted strings instead of counting lists. I would have thought it would be
-#  more efficient to count as this is an O(1) operation but sorting is better
-#  in this case.
 import collections
 import itertools
 
