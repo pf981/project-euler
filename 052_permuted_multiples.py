@@ -1,6 +1,9 @@
+# This version is approximately three times faster than v1 just by using
+#  sorted strings instead of counting lists. I would have thought it would be
+#  more efficient to count as this is an O(1) operation but sorting is better
+#  in this case.
 import collections
 import itertools
-from helpers import helpers
 
 def are_permutations(int_list):
     """
@@ -8,18 +11,15 @@ def are_permutations(int_list):
     other. False otherwise.
     """
     for i, num in enumerate(int_list):
-        digits = helpers.int_to_digits(num)
-
         if i == 0:
-            first_counts = collections.Counter(digits)
+            first_digits = collections.Counter(str(int(num)))
             continue
 
-        # Count each digit
-        counts = collections.Counter(digits)
+        digits = collections.Counter(str(int(num)))
 
         # If an element of the list has a different digit count to the first,
         # it is not a permutation
-        if counts != first_counts:
+        if digits != first_digits:
             return False
     return True
 
