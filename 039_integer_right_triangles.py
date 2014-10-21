@@ -9,8 +9,9 @@ def generate_triples(max_side):
     """
     for a in range(1, max_side):
         for b in range(a, max_side):
-            c = int(math.sqrt(a*a + b*b))
-            if a*a + b*b == c*c:
+            c_double = math.sqrt(a*a + b*b)
+            c = int(c_double)
+            if c == c_double:
                 yield [a, b, c]
 
 def main():
