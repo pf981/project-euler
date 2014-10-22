@@ -1,5 +1,8 @@
 import itertools
+import math
+import numpy as np
 import re
+
 from functools import reduce
 from operator import mul
 
@@ -106,3 +109,10 @@ def primes_to(n):
             sieve[((k*k)//3)::2*k] = False
             sieve[(k*k+4*k-2*k*(i&1))//3::2*k] = False
     return np.r_[2,3,((3*np.nonzero(sieve)[0]+1)|1)]
+
+
+def list_to_int(nums):
+    """
+    Returns an int which is a concatenation of a list of integers
+    """
+    return int(''.join(map(str, nums)))
