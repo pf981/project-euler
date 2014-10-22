@@ -5,9 +5,6 @@ PRIMES = list(helpers.primes_to(UPPER_BOUND))
 PRIMES_SET = frozenset(PRIMES)
 
 def most_consecutive_prime_sum():
-    print(PRIMES)
-    print()
-
     # Find the smallest upper bound for the length of the sublist
     max_length = 0
     list_sum = 0
@@ -16,6 +13,8 @@ def most_consecutive_prime_sum():
         list_sum += PRIMES[max_length]
 
     # For each possible length, from largest to smallest
+    # Note that if we started at len(PRIMES) instead of max_length it would
+    # take infeasibly long
     for length in reversed(range(1, max_length)):
         for start in range(len(PRIMES) - length + 1):
             if start == 0:
@@ -29,12 +28,11 @@ def most_consecutive_prime_sum():
             # If the sum is getting too big
             if list_sum > UPPER_BOUND:
                 # Then the following sums will only be bigger, so break
-                print(length)
                 break
 
-            print()
+            # If the sum is a prime, it must be the prime with the biggest
+            # sequence length
             if list_sum in PRIMES_SET:
-                print("@", list_sum, sum(PRIMES[start:start+length]), PRIMES[start:start+length])
                 return(list_sum)
 
 
