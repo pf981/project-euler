@@ -1,3 +1,7 @@
+# Time:
+# real    0m1.789s
+# user    0m1.702s
+# sys     0m0.082s
 import sympy
 
 def main():
@@ -6,7 +10,6 @@ def main():
     for n in range(1, 101):
         for r in range(1, n+1):
             if sympy.binomial(n, r) > 1000000:
-                print(n, r)
                 count += 1
     answer = count
     print(answer)
