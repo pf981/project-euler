@@ -116,3 +116,7 @@ def list_to_int(nums):
     Returns an int which is a concatenation of a list of integers
     """
     return int(''.join(map(str, nums)))
+
+def squares_to(n):
+    for i in range(n):
+        yield i**2
