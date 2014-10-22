@@ -1,6 +1,10 @@
 from helpers import helpers
 
 UPPER_BOUND = 1000000
+# Primes were stored as both a list and a set because lists are better for
+# iterating over whereas sets are better for determining if an element is a
+# member of that set. Both types were chosen as a significant amount of
+# iterating and using the "in" keyword were common in this problem.
 PRIMES = list(helpers.primes_to(UPPER_BOUND))
 PRIMES_SET = frozenset(PRIMES)
 
