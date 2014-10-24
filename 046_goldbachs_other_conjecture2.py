@@ -16,22 +16,13 @@ def get_smallest_not_satisfying_golbach():
             # Store it in the primes list
             primes.append(candidate)
         else:
+            # If it cannot be written as the sum of a prime and a square
             if not any(is_square((candidate - prime) / 2) for prime in primes):
                 return candidate
-            # for prime in primes:
-            #     #if candidate == 5777:
-            #     print(candidate, (candidate-prime)/2)
-            #     # Check if it satisfies our criteria
-            #     if not is_square((candidate - prime) / 2):
-            #         return candidate
-
 
 def main():
-    # print(is_square(9))
-    # print(is_square(10))
     answer = get_smallest_not_satisfying_golbach()
     print(answer)
-
 
 if __name__ == '__main__':
     main()
