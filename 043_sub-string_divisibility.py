@@ -27,10 +27,18 @@ def is_sub_string_divisible(digits_str):
 def main():
     # print(is_pandigital("12345"))
     # print(is_pandigital("123145"))
-    print(is_sub_string_divisible("1406357289"))
-    print(is_sub_string_divisible("1406357829"))
+    # print(is_sub_string_divisible("1406357289"))
+    # print(is_sub_string_divisible("1406357829"))
+    answer = sum(int(''.join(s))
+                 for s in itertools.permutations('1234567890')
+                 if is_sub_string_divisible(''.join(s)))
+    # special_pandigitals = [int(''.join(s)) for s in itertools.permutations('1234567890')]
+    # answer = 0
+    # print(special_pandigitals)
+    # answer = 0
     # for s in itertools.permutations('1234567890'):
-    #     print(s)
+    #     print(int(''.join(s)))
+    print(answer)
     return 0
 
 if __name__ == '__main__':
