@@ -47,6 +47,8 @@ def main():
 
     digits = [int(digit) for digit in re.findall("(\d+)", text)]
 
+    decrypted_strings = []
+
     for p1 in range(ord('a'), ord('z') + 1):
         for p2 in range(ord('a'), ord('z') + 1):
             for p3 in range(ord('a'), ord('z') + 1):
@@ -56,10 +58,14 @@ def main():
                 # print("@@", password_string)
                 decrypted = xor_text(password, digits)
                 decrypted_string = ''.join(chr(s) for s in decrypted)
+                decrypted_strings.append(password_string + decrypted_string)
                 # print(calculate_index_of_coincidence(decrypted_string))
-                if re.search("the", decrypted_string.lower()):
-                    print(password_string, decrypted_string[:30])
+                # if re.search("you", decrypted_string.lower()):
+                #     print(password_string, decrypted_string[:30])
 
+    decrypted_strings.sort(key=lambda x: x.count('e'))
+    for d in decrypted_strings:
+        print(d[:40])
 
     answer = 0
     print(answer)
