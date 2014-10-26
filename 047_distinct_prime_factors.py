@@ -1,7 +1,7 @@
 import itertools
 from helpers import helpers
 
-NUM_CONSECUTIVE = 2
+NUM_CONSECUTIVE = 4
 
 def satisfies_criteria(candidate):
     for num_consecutive in range(NUM_CONSECUTIVE):
