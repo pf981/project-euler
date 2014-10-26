@@ -6,9 +6,7 @@ def is_possible_password(candidate, graph):
     """
     Returns true if the candidate would satisfy the password requirements
     """
-    # FIXME: Blank will pass
-
-    # For each
+    # For each digit that has known digits that must follow it
     for key in graph:
         index_of_key = candidate.find(key)
 
@@ -22,12 +20,6 @@ def is_possible_password(candidate, graph):
             if candidate.find(must_follow_key, index_of_key) == -1:
                 return False
     return True
-
-    # for i, digit in enumerate(candidate):
-    #     for must_follow in graph[digit]:
-    #         if candidate.find(must_follow, i) == -1:
-    #             return False
-    # return True
 
 def connections(attempt):
     # digit1 is the key
@@ -62,20 +54,6 @@ def main():
 
     # graph is a dictionary whose values are the digits that must follow the key
     graph = make_graph(all_attempts)
-
-
-    print(is_possible_password("", graph))
-
-
-    # print(graph)
-
-    # print(is_possible_password('73162890', graph))
-    # print(is_possible_password('83917620', graph))
-    # print(is_possible_password('11111111', graph))
-
-
-    # return
-
 
     # Try all permutations of possible digits
     for permutation in itertools.permutations(possible_digits):
