@@ -9,7 +9,7 @@ def is_permutation(a, b):
 
 def find_prime_permutation_triple():
     # We are only interested in 4-digit primes
-    primes = set(sympy.sieve.primerange(1000, 9999))
+    primes = frozenset(sympy.sieve.primerange(1000, 9999))
 
     for prime1 in primes:
         # We are not interested in the example number in the question
