@@ -3,10 +3,14 @@ import itertools
 import re
 
 def is_possible_password(candidate, graph):
-    print(candidate)
+    """
+    Returns true if the candidate would satisfy the password requirements
+    """
+    # print(candidate)
     for i, digit in enumerate(candidate):
+        # print(digit)
         for must_follow in graph[digit]:
-            if not candidate.find(must_follow, i):
+            if candidate.find(must_follow, i) == -1:
                 return False
     return True
     # digits_left = list(permutation)
@@ -44,6 +48,7 @@ def make_graph(all_attempts):
     return graph
 
 def main():
+
     with open("p079_keylog.txt") as in_file:
         text = in_file.read()
 
@@ -55,11 +60,23 @@ def main():
     # graph is a dictionary whose values are the digits that must follow the key
     graph = make_graph(all_attempts)
 
+    # print(graph)
+
+    # print(is_possible_password('73162890', graph))
+    # print(is_possible_password('83917620', graph))
+    # print(is_possible_password('11111111', graph))
+
+
+    # return
+
+
     # Try all permutations of possible digits
     for permutation in itertools.permutations(possible_digits):
+        candidate_password = ''.join(permutation)
+
         # If this permutation is legitimate
-        if (is_possible_password(''.join(permutation), graph)):
-            answer = permutation
+        if (is_possible_password(candidate_password, graph)):
+            answer = ''.join(candidate_password)
             break
 
     print(answer)
