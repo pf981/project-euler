@@ -1,11 +1,24 @@
+import collections
 import itertools
 import re
+
+def calculate_index_of_coincidence(text):
+    N = len(text)
+    counts = collections.Counter(text.lower())
+    # print(counts)
+
+    # for letter in range(ord('a'), ord('z') + 1):
+    #     print(chr(letter), counts[chr(letter)])
+
+    index_of_coincidence = 26/(N*(N-1)) * sum(counts[chr(letter)] * (counts[chr(letter)] - 1) for letter in range(ord('a'), ord('z') + 1))
+
+    return index_of_coincidence
 
 def xor_text(password, digits):
     result = []
     password_cycle = itertools.cycle(password)
 
-    for digit in (ord(d) for d in digits):
+    for digit in digits:
         password_char = next(password_cycle)
         # print(chr(password_char))
         # print(password_copy[0])
@@ -27,6 +40,11 @@ def main():
     with open("p059_cipher.txt") as in_file:
         text = in_file.read()
 
+    # print(calculate_index_of_coincidence('hello my honey hello my baby there goes my ragtime'))
+    # return
+    # print(65 ^ 42)
+    # return
+
     digits = [int(digit) for digit in re.findall("(\d+)", text)]
 
     for p1 in range(ord('a'), ord('z') + 1):
@@ -35,9 +53,13 @@ def main():
                 password = [p1, p2, p3]
                 password_string = ''.join(chr(p) for p in password)
 
-                print("@@", password_string)
-                decrypted = xor_text(password, text[:20])
-                print(''.join(chr(s) for s in decrypted))
+                # print("@@", password_string)
+                decrypted = xor_text(password, digits)
+                decrypted_string = ''.join(chr(s) for s in decrypted)
+                # print(calculate_index_of_coincidence(decrypted_string))
+                if re.search("the", decrypted_string.lower()):
+                    print(password_string, decrypted_string[:30])
+
 
     answer = 0
     print(answer)
