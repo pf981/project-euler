@@ -1,6 +1,9 @@
 import collections
 import re
 
+def find_smallest_password(vertex, graph):
+    pass
+
 def connections(attempt):
     for i, digit1 in enumerate(attempt):
         for digit2 in attempt[i+1:]:
@@ -28,6 +31,16 @@ def main():
 
     graph = make_graph(all_attempts)
     print(graph)
+
+    possible_passwords = []
+
+    # For each starting point
+    for starting_vertex in graph:
+        # print(vertex)
+        password = find_smallest_password(starting_vertex, graph)
+
+        if password:
+            possible_passwords.append(password)
 
     # possible_numbers = set(digit for digit in attempt for attempt in all_attempts)
     # possible_numbers = set(digit for attempt in all_attempts for digit in attempt)
