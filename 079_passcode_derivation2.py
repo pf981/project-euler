@@ -6,23 +6,27 @@ def is_possible_password(candidate, graph):
     """
     Returns true if the candidate would satisfy the password requirements
     """
-    # print(candidate)
-    for i, digit in enumerate(candidate):
-        # print(digit)
-        for must_follow in graph[digit]:
-            if candidate.find(must_follow, i) == -1:
+    # FIXME: Blank will pass
+
+    # For each
+    for key in graph:
+        index_of_key = candidate.find(key)
+
+        # If the key is not present in the candidate password
+        if index_of_key == -1:
+            return False
+
+        # For each digit that must follow the key
+        for must_follow_key in graph[key]:
+            # If that digit cannot be found after the key
+            if candidate.find(must_follow_key, index_of_key) == -1:
                 return False
     return True
-    # digits_left = list(permutation)
 
-    # cur_digit = digits_left.pop()
-    # while digits_left:
-    #     # If there is no edge between the current digit and the next
-    #     if not digits_left[0] in graph[cur_digit]:
-    #         return False
-
-    #     cur_digit = digits_left.pop()
-
+    # for i, digit in enumerate(candidate):
+    #     for must_follow in graph[digit]:
+    #         if candidate.find(must_follow, i) == -1:
+    #             return False
     # return True
 
 def connections(attempt):
@@ -48,7 +52,6 @@ def make_graph(all_attempts):
     return graph
 
 def main():
-
     with open("p079_keylog.txt") as in_file:
         text = in_file.read()
 
@@ -59,6 +62,10 @@ def main():
 
     # graph is a dictionary whose values are the digits that must follow the key
     graph = make_graph(all_attempts)
+
+
+    print(is_possible_password("", graph))
+
 
     # print(graph)
 
