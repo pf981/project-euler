@@ -40,12 +40,14 @@ def main():
     with open("p059_cipher.txt") as in_file:
         text = in_file.read()
 
-    # print(calculate_index_of_coincidence('hello my honey hello my baby there goes my ragtime'))
-    # return
-    # print(65 ^ 42)
-    # return
+
 
     digits = [int(digit) for digit in re.findall("(\d+)", text)]
+
+    decrypted = xor_text([ord('g'), ord('o'), ord('d')], digits)
+    decrypted_string = ''.join(chr(s) for s in decrypted)
+    print(decrypted_string[:30])
+    print(sum(decrypted))
 
     decrypted_strings = []
 
