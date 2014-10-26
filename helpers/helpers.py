@@ -120,3 +120,6 @@ def list_to_int(nums):
 def squares_to(n):
     for i in range(n):
         yield i**2
+
+def is_palindrome(num):
+    return str(num) == str(num)[::-1]
