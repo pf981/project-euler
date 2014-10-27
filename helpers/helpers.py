@@ -98,6 +98,7 @@ def get_million_primes():
         text = in_file.read()
     return [int(p) for p in re.findall("(\d+)", text)]
 
+# FIXME: You should use SymPy for prime generation using sieve and checking
 def primes_to(n):
     # http://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n-in-python/3035188#3035188
     """ Input n>=6, Returns a array of primes, 2 <= p < n """
