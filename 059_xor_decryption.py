@@ -44,10 +44,11 @@ def main():
 
     digits = [int(digit) for digit in re.findall("(\d+)", text)]
 
-    decrypted = xor_text([ord('g'), ord('o'), ord('d')], digits)
-    decrypted_string = ''.join(chr(s) for s in decrypted)
-    print(decrypted_string[:30])
-    print(sum(decrypted))
+    # decrypted = xor_text([ord('g'), ord('o'), ord('d')], digits)
+    # decrypted_string = ''.join(chr(s) for s in decrypted)
+    # print(decrypted_string)
+    # print(sum(decrypted))
+    # return
 
     decrypted_strings = []
 
@@ -65,7 +66,7 @@ def main():
                 # if re.search("you", decrypted_string.lower()):
                 #     print(password_string, decrypted_string[:30])
 
-    decrypted_strings.sort(key=lambda x: x.count('e'))
+    decrypted_strings.sort(key=lambda x: x.count('and'))
     for d in decrypted_strings:
         print(d[:40])
 
