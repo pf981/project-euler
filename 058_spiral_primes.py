@@ -1,35 +1,25 @@
 import itertools
-import sympy
-#from sympy.ntheory.primetest import isprime
-#from sympy.ntheory.primetest import primerange
-
-PRIMES = set(sympy.primerange(1, 20000000))
-MAX_PRIME = max(PRIMES)
-
-def ratio_of_primes(nums):
-    # return sum(1 for n in nums if isprime(n)) / len(nums)
-    return sum(1 for n in nums if n in PRIMES) / len(nums)
+from sympy.ntheory.primetest import isprime
 
 def compute_min_length():
-    diagonals = [1]
     cur_value = 1
+    num_primes = 0
 
     for spiral_radius in itertools.count(1):
         gap_between_diagonals = 2 * spiral_radius
 
-        # For each corner
-        for _ in range(4):
+        # For each of the first three corners
+        for _ in range(3):
             cur_value += gap_between_diagonals
-            diagonals.append(cur_value)
+            if isprime(cur_value):
+                num_primes += 1
 
-        #print(spiral_radius, diagonals)
-        # print(spiral_radius*2 + 1, ratio_of_primes(diagonals))
+        # Ignore the bottom right corner
+        cur_value += gap_between_diagonals
 
-        if cur_value > MAX_PRIME:
-            return None
-
-        print(ratio_of_primes(diagonals))
-        if ratio_of_primes(diagonals) < 0.1:
+        # There are 4 corners in each spiral, and one center number
+        prime_ratio_of_diagonal = num_primes / (4 * spiral_radius + 1)
+        if prime_ratio_of_diagonal < 0.1:
             return spiral_radius * 2 + 1
 
 
