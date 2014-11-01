@@ -3,7 +3,7 @@ import numpy as np
 
 MATRIX = np.array([[131, 673, 234, 103, 18],
                    [201, 96, 342, 965, 150],
-                   [630, 803, 736, 422, 111],
+                   [630, 803, 746, 422, 111],
                    [537, 699, 497, 121, 956],
                    [805, 732, 524, 37, 331]])
 
@@ -40,24 +40,27 @@ def iterate_zigzag(tree):
     # print(tree[0][0])
     for start_column in reversed(range(len(tree))):
         for row in reversed(range(start_column + 1, len(tree))):
-            print(start_column, row, tree[row][start_column - row])
-            yield (row, start_column - row)
+            print('@', row, start_column, tree[row][start_column - row])
+            print('*', row, len(tree) + start_column - row, tree[row][len(tree) + start_column - row])
+            yield (row, len(tree) + start_column - row)
 
-    print()
-    print()
+    # print()
+    # print()
     for start_row in reversed(range(len(tree))):
         for column in range(start_row + 1):
-            print(start_row, column, tree[start_row - column][column])
+            print('!', start_row, column, tree[start_row - column][column])
             yield (start_row - column, column)
-    print()
-    print()
-    print()
+    # print()
+    # print()
+    # print()
 
 
     # return [(1, 2), (1, 2)]
 
 
 def min_of_not_none(a, b):
+    if a is None and b is None:
+        return 0
     return min(element for element in [a, b] if element != None)
 
 # This is the same code as 018
@@ -72,6 +75,7 @@ def length_of_shortest_path(tree):
         # tree[x][y] += min_of_not_none(
         #     tree[x+1][y], # Right
         #     tree[x][y+1]) # Down
+        print(x, y, tree[x][y], '^', right, down)
         tree[x][y] += min_of_not_none(right, down)
 
     print(tree)
