@@ -20,6 +20,10 @@ def iterate_zigzag(matrix):
 
 
 def min_of_not_none(a, b):
+    """
+    Returns the minimum of a and b, ignoring None values. If both are None, 0
+    will be returned
+    """
     if a is None and b is None:
         return 0
     return min(element for element in [a, b] if element != None)
