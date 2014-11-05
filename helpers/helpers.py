@@ -124,3 +124,10 @@ def squares_to(n):
 
 def is_palindrome(num):
     return str(num) == str(num)[::-1]
+
+
+def min_ignore_none(nums):
+    without_nones = [n for n in nums if n is not None]
+    if not without_nones:
+        return 0
+    return min(without_nones)
