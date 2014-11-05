@@ -32,41 +32,107 @@ class Card:
 
 def get_hand(hand_string):
     hand = [Card(card_string) for card_string in re.findall("\w\w", hand_string)]
-    return sorted(hand, key=lambda card: card.value)
+    return sorted(hand, key=lambda card: card.value, reverse=True)
 
 
 def rank_hand(hand):
-    rank = [0]*10
+    base_rank = None
+    secondary_rank = hand
+
     if all(card.suit == hand[0].suit for card in hand):
-        rank[0] = BaseRanks.flush
+        base_rank = BaseRanks.flush
 
-    if all(card.value == hand[i-1].value + 1 for i, card in enumerate(hand[1:], start=1)):
-        if rank[0] == BaseRanks.flush:
-            rank[0] = BaseRanks.straight_flush
+    if all(card.value == hand[i-1].value - 1 for i, card in enumerate(hand[1:], start=1)):
+        if base_rank == BaseRanks.flush:
+            base_rank = BaseRanks.straight_flush
         else:
-            rank[0] = BaseRanks.straight
+            base_rank = BaseRanks.straight
 
-        rank[1] = hand[-1]
-        return rank
+    # Four of a kind
+    for i, card in enumerate(hand[3:], start=3):
+        if card.value == hand[i-1].value == hand[i-2].value == hand[i-3].value:
+            base_rank = BaseRanks.four_of_a_kind
+            secondary_rank = [card.value] + [c.value for c in hand if c.value != card.value]
+            return base_rank, secondary_rank
 
-        # Royal flush
-    return rank
+    # Three of a kind
+    for i, card in enumerate(hand[2:], start=2):
+        if card.value == hand[i-1].value == hand[i-2].value:
+            base_rank = BaseRanks.three_of_a_kind
+            secondary_rank = [card.value] + [c.value for c in hand if c.value != card.value]
+            break
+
+    # Pair
+    for i, card in enumerate(hand[1:], start=1):
+        # If the cards is a triple, ignore it
+        if base_rank == BaseRanks.three_of_a_kind and card.value == secondary_rank[0]:
+            continue
+        if base_rank == BaseRanks.one_pair and card.value == secondary_rank[0]:
+            continue
+
+        if card.value == hand[i-1].value:
+            if base_rank == BaseRanks.three_of_a_kind:
+                base_rank = BaseRanks.full_house
+                secondary_rank.append(card.value)
+            elif base_rank == BaseRanks.one_pair:
+                base_rank = BaseRanks.two_pairs
+                secondary_rank = [secondary_rank[0], card.value] + [c.value for c in hand if c.value != card.value]
+            else:
+                base_rank = BaseRanks.one_pair
+                secondary_rank = [card.value] + [c.value for c in hand if c.value != card.value]
+
+    if not base_rank:
+        base_rank = BaseRanks.high_card
+
+    return base_rank, secondary_rank # and others
 
 def unit_tests():
+    if rank_hand(get_hand("8D 7D 9C TD KH"))[0] == BaseRanks.high_card:
+        print("passed high card")
+    else:
+        print("FAILED HIGH CARD")
+
+    if rank_hand(get_hand("8D 7D 8C TD KH"))[0] == BaseRanks.one_pair:
+        print("passed one pair")
+    else:
+        print("FAILED ONE PAIR")
+
+    if rank_hand(get_hand("8D KD 8C TD KH"))[0] == BaseRanks.two_pairs:
+        print("passed two pair")
+    else:
+        print("FAILED TWO PAIR")
+
+    if rank_hand(get_hand("8D 7D 8C TD 8H"))[0] == BaseRanks.three_of_a_kind:
+        print("passed three of a kind")
+    else:
+        print("FAILED THREE OF A KIND")
+
+    if rank_hand(get_hand("8C 7D 9H TS 6H"))[0] == BaseRanks.straight:
+        print("passed straight")
+    else:
+        print("FAILED STRAIGHT")
+
     if rank_hand(get_hand("3C 5C 8C JC"))[0] == BaseRanks.flush:
         print("passed flush")
     else:
         print("FAILED FLUSH")
 
-    if rank_hand(get_hand("8C 7D 9H TS"))[0] == BaseRanks.straight:
-        print("passed straight")
+    if rank_hand(get_hand("8D 7D 8C 7S 8H"))[0] == BaseRanks.full_house:
+        print("passed full house")
     else:
-        print("FAILED STRAIGHT")
+        print("FAILED FULL HOUSE")
+        print(rank_hand(get_hand("8D 7D 8C 7S 8H")))
 
-    if rank_hand(get_hand("8D 7D 9D TD"))[0] == BaseRanks.straight_flush:
+    if rank_hand(get_hand("8D 7D 8C 8S 8H"))[0] == BaseRanks.four_of_a_kind:
+        print("passed four of a kind")
+    else:
+        print("FAILED four of a kind")
+
+    if rank_hand(get_hand("8D 7D 9D TD JD"))[0] == BaseRanks.straight_flush:
         print("passed straight flush")
     else:
         print("FAILED STRAIGHT FLUSH")
+
 
 def main():
     # with open("p054_pokertest.txt") as in_file:
