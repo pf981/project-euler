@@ -1,34 +1,49 @@
 import enum
 import re
-from helpers import helpers
-
-# FIXME: Don't use globals
-value_relation = {}
-value_relation['T'] = 10
-value_relation['J'] = 11
-value_relation['Q'] = 12
-value_relation['K'] = 13
-value_relation['A'] = 14
-for value in range(1, 10):
-    value_relation[str(value)] = value
-value_relation.update(dict(reversed(item) for item in value_relation.items()))
-
 
 # The higher the number, the greater the value of the hand
 # No need for royal flush as it is just a special case of a straight flush
 BaseRanks = enum.IntEnum('BaseRanks', 'high_card one_pair two_pairs three_of_a_kind straight flush full_house four_of_a_kind straight_flush')
 
 
+def generate_value_relation():
+    """
+    This is a relation to convert character representations of card values to
+    integer values and vice-versa. For example
+        value_relation['K'] == 13
+        value_relation[13] == 'K'
+    """
+    value_relation = {}
+
+    # Picture cards
+    value_relation['T'] = 10
+    value_relation['J'] = 11
+    value_relation['Q'] = 12
+    value_relation['K'] = 13
+    value_relation['A'] = 14
+
+    # Number cards
+    for value in range(1, 10):
+        value_relation[str(value)] = value
+
+    # Add the reverse relationship
+    value_relation.update(dict(reversed(item) for item in value_relation.items()))
+
+    return value_relation
+
+
 class Card:
+    value_relation = generate_value_relation()
+
     def __init__(self, card_string):
         # Convert the value to an integer
-        self.value = value_relation[card_string[0]]
+        self.value = Card.value_relation[card_string[0]]
 
         # We can leave the suit as a char
         self.suit = card_string[1]
 
     def __repr__(self):
-        return value_relation[self.value] + self.suit
+        return Card.value_relation[self.value] + self.suit
 
 
 def get_hand(hand_string):
@@ -96,12 +111,20 @@ def rank_hand(hand):
 
 
 def rank_hand_int(hand):
+    """
+    Returns an integer representation of the hands value. Higher valued hands
+    beat lower valued hands
+    """
     rank = rank_hand(hand)
-
+    # This makes the elements of rank that are closer to the front more significant
     return sum((value*(100000**(100-2*i)) for i, value in enumerate(rank)))
 
 
 def test_hand(hand_string, expected_rank):
+    """
+    This function is used in unit testing to check a hand against its expected
+    rank string
+    """
     rank = rank_hand(get_hand(hand_string))
     if rank == expected_rank:
         print("PASSED", hand_string, expected_rank)
