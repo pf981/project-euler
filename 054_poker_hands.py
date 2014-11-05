@@ -74,10 +74,10 @@ def rank_hand(hand):
         if card.value == hand[i-1].value:
             if base_rank == BaseRanks.three_of_a_kind:
                 base_rank = BaseRanks.full_house
-                secondary_rank.append(card.value)
+                secondary_rank = [secondary_rank[0], card.value] + [c.value for c in hand if c.value != card.value and c.value != secondary_rank[0]]
             elif base_rank == BaseRanks.one_pair:
                 base_rank = BaseRanks.two_pairs
-                secondary_rank = [secondary_rank[0], card.value] + [c.value for c in hand if c.value != card.value]
+                secondary_rank = [secondary_rank[0], card.value] + [c.value for c in hand if c.value != card.value and c.value != secondary_rank[0]]
             else:
                 base_rank = BaseRanks.one_pair
                 secondary_rank = [card.value] + [c.value for c in hand if c.value != card.value]
@@ -88,76 +88,56 @@ def rank_hand(hand):
     return [int(base_rank)] + secondary_rank # and others
 
 def rank_hand_int(hand):
-     rank = rank_hand(hand)
- #    print(repr(rank[0]))
-     return sum((value*(10**(10-i)) for i, value in enumerate(rank)))
+    rank = rank_hand(hand)
+#    print(repr(rank[0]))
+    return sum((value*(100000**(10-i)) for i, value in enumerate(rank)))
+
+def test_hand(hand_string, expected_rank):
+    rank = rank_hand(get_hand(hand_string))
+    if rank == expected_rank:
+        print("PASSED", hand_string, expected_rank)
+    else:
+        print("FAILED:")
+        print("Hand:", hand_string)
+        print("Expected:", expected_rank)
+        print("Actual:", rank)
+        print()
+
+def unit_tests2():
+    test_hand("8D 7D 9C TD KH", [int(BaseRanks.high_card), 13, 10, 9, 8, 7])
+    test_hand("8D 7D 8C TD KH", [int(BaseRanks.one_pair), 8, 13, 10, 7])
+    test_hand("8D KD 8C TD KH", [int(BaseRanks.two_pairs), 13, 8, 10])
+    test_hand("8D 7D 8C TD 8H", [int(BaseRanks.three_of_a_kind), 8, 10, 7])
+    test_hand("8C 7D 9H TS 6H", [int(BaseRanks.straight), 10, 9, 8, 7, 6])
+    test_hand("3C 5C 8C JC TC", [int(BaseRanks.flush), 11, 10, 8, 5, 3])
+    test_hand("8D 7D 8C 7S 8H", [int(BaseRanks.full_house), 8, 7])
+    test_hand("8D 7D 8C 8S 8H", [int(BaseRanks.four_of_a_kind), 8, 7])
+    test_hand("8D 7D 9D TD JD", [int(BaseRanks.straight_flush), 11, 10, 9, 8, 7])
 
 def unit_tests():
-     if rank_hand(get_hand("8D 7D 9C TD KH"))[0] == BaseRanks.high_card:
-         print("passed high card")
-     else:
-         print("FAILED HIGH CARD")
-
-     if rank_hand(get_hand("8D 7D 8C TD KH"))[0] == BaseRanks.one_pair:
-         print("passed one pair")
-     else:
-         print("FAILED ONE PAIR")
-
-     if rank_hand(get_hand("8D KD 8C TD KH"))[0] == BaseRanks.two_pairs:
-         print("passed two pair")
-     else:
-         print("FAILED TWO PAIR")
-
-     if rank_hand(get_hand("8D 7D 8C TD 8H"))[0] == BaseRanks.three_of_a_kind:
-         print("passed three of a kind")
-     else:
-         print("FAILED THREE OF A KIND")
-
-     if rank_hand(get_hand("8C 7D 9H TS 6H"))[0] == BaseRanks.straight:
-         print("passed straight")
-     else:
-         print("FAILED STRAIGHT")
-
-     if rank_hand(get_hand("3C 5C 8C JC"))[0] == BaseRanks.flush:
-         print("passed flush")
-     else:
-         print("FAILED FLUSH")
-
-     if rank_hand(get_hand("8D 7D 8C 7S 8H"))[0] == BaseRanks.full_house:
-         print("passed full house")
-     else:
-         print("FAILED FULL HOUSE")
-         print(rank_hand(get_hand("8D 7D 8C 7S 8H")))
-
-     if rank_hand(get_hand("8D 7D 8C 8S 8H"))[0] == BaseRanks.four_of_a_kind:
-         print("passed four of a kind")
-     else:
-         print("FAILED four of a kind")
-
-     if rank_hand(get_hand("8D 7D 9D TD JD"))[0] == BaseRanks.straight_flush:
-         print("passed straight flush")
-     else:
-         print("FAILED STRAIGHT FLUSH")
-
+    rank = rank_hand(get_hand("AD 2D 3D 4D 5D"))
+    rank2 = rank_hand(get_hand("KD QD JD TD 8D"))
+    print(rank, rank2)
+    print(rank_hand_int(get_hand("AD 2D 3D 4D 5D")), rank_hand_int(get_hand("KD QD JD TD 8D")))
 
 def main():
-     with open("p054_poker.txt") as in_file:
-         text = in_file.read()
+    # with open("p054_poker.txt") as in_file:
+    #     text = in_file.read()
 
-     all_hands_string = re.findall("(.. .. .. .. ..) (.. .. .. .. ..)", text)
-     all_hands = [(get_hand(hand1), get_hand(hand2)) for hand1, hand2 in all_hands_string]
+    # all_hands_string = re.findall("(.. .. .. .. ..) (.. .. .. .. ..)", text)
+    # all_hands = [(get_hand(hand1), get_hand(hand2)) for hand1, hand2 in all_hands_string]
 
-     # for hand1, hand2 in all_hands:
-     #    if rank_hand_int(hand1) > rank_hand_int(hand2):
-     #        print(hand1, " > ", hand2)
-     #    else:
-     #        print(hand1, " < ", hand2)
-     # unit_tests()
-     # print(all_hands)
-     # print(all_hands)
-     answer = sum(1 for hand1, hand2 in all_hands if rank_hand_int(hand1) > rank_hand_int(hand2))
-     print(answer)
+    # for hand1, hand2 in all_hands:
+    #    if rank_hand_int(hand1) > rank_hand_int(hand2):
+    #        print(hand1, " > ", hand2)
+    #    else:
+    #        print(hand1, " < ", hand2)
+    unit_tests2()
+    # print(all_hands)
+    # print(all_hands)
+    # answer = sum(1 for hand1, hand2 in all_hands if rank_hand_int(hand1) > rank_hand_int(hand2))
+    # print(answer)
 
 
 if __name__ == '__main__':
-     main()
+    main()
