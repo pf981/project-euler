@@ -1,5 +1,6 @@
 import enum
 import re
+from helpers import helpers
 
 # FIXME: Don't use globals
 value_relation = {}
@@ -15,7 +16,7 @@ value_relation.update(dict(reversed(item) for item in value_relation.items()))
 
 # The higher the number, the greater the value of the hand
 # No need for royal flush as it is just a special case of a straight flush
-BaseRanks = enum.Enum('BaseRanks', 'high_card one_pair two_pairs three_of_a_kind straight flush full_house four_of_a_kind straight_flush')
+BaseRanks = enum.IntEnum('BaseRanks', 'high_card one_pair two_pairs three_of_a_kind straight flush full_house four_of_a_kind straight_flush')
 
 
 class Card:
@@ -37,7 +38,7 @@ def get_hand(hand_string):
 
 def rank_hand(hand):
     base_rank = None
-    secondary_rank = hand
+    secondary_rank = [card.value for card in hand]
 
     if all(card.suit == hand[0].suit for card in hand):
         base_rank = BaseRanks.flush
@@ -53,7 +54,7 @@ def rank_hand(hand):
         if card.value == hand[i-1].value == hand[i-2].value == hand[i-3].value:
             base_rank = BaseRanks.four_of_a_kind
             secondary_rank = [card.value] + [c.value for c in hand if c.value != card.value]
-            return base_rank, secondary_rank
+            return [int(base_rank)] + secondary_rank
 
     # Three of a kind
     for i, card in enumerate(hand[2:], start=2):
@@ -84,66 +85,79 @@ def rank_hand(hand):
     if not base_rank:
         base_rank = BaseRanks.high_card
 
-    return base_rank, secondary_rank # and others
+    return [int(base_rank)] + secondary_rank # and others
+
+def rank_hand_int(hand):
+     rank = rank_hand(hand)
+ #    print(repr(rank[0]))
+     return sum((value*(10**(10-i)) for i, value in enumerate(rank)))
 
 def unit_tests():
-    if rank_hand(get_hand("8D 7D 9C TD KH"))[0] == BaseRanks.high_card:
-        print("passed high card")
-    else:
-        print("FAILED HIGH CARD")
+     if rank_hand(get_hand("8D 7D 9C TD KH"))[0] == BaseRanks.high_card:
+         print("passed high card")
+     else:
+         print("FAILED HIGH CARD")
 
-    if rank_hand(get_hand("8D 7D 8C TD KH"))[0] == BaseRanks.one_pair:
-        print("passed one pair")
-    else:
-        print("FAILED ONE PAIR")
+     if rank_hand(get_hand("8D 7D 8C TD KH"))[0] == BaseRanks.one_pair:
+         print("passed one pair")
+     else:
+         print("FAILED ONE PAIR")
 
-    if rank_hand(get_hand("8D KD 8C TD KH"))[0] == BaseRanks.two_pairs:
-        print("passed two pair")
-    else:
-        print("FAILED TWO PAIR")
+     if rank_hand(get_hand("8D KD 8C TD KH"))[0] == BaseRanks.two_pairs:
+         print("passed two pair")
+     else:
+         print("FAILED TWO PAIR")
 
-    if rank_hand(get_hand("8D 7D 8C TD 8H"))[0] == BaseRanks.three_of_a_kind:
-        print("passed three of a kind")
-    else:
-        print("FAILED THREE OF A KIND")
+     if rank_hand(get_hand("8D 7D 8C TD 8H"))[0] == BaseRanks.three_of_a_kind:
+         print("passed three of a kind")
+     else:
+         print("FAILED THREE OF A KIND")
 
-    if rank_hand(get_hand("8C 7D 9H TS 6H"))[0] == BaseRanks.straight:
-        print("passed straight")
-    else:
-        print("FAILED STRAIGHT")
+     if rank_hand(get_hand("8C 7D 9H TS 6H"))[0] == BaseRanks.straight:
+         print("passed straight")
+     else:
+         print("FAILED STRAIGHT")
 
-    if rank_hand(get_hand("3C 5C 8C JC"))[0] == BaseRanks.flush:
-        print("passed flush")
-    else:
-        print("FAILED FLUSH")
+     if rank_hand(get_hand("3C 5C 8C JC"))[0] == BaseRanks.flush:
+         print("passed flush")
+     else:
+         print("FAILED FLUSH")
 
-    if rank_hand(get_hand("8D 7D 8C 7S 8H"))[0] == BaseRanks.full_house:
-        print("passed full house")
-    else:
-        print("FAILED FULL HOUSE")
-        print(rank_hand(get_hand("8D 7D 8C 7S 8H")))
+     if rank_hand(get_hand("8D 7D 8C 7S 8H"))[0] == BaseRanks.full_house:
+         print("passed full house")
+     else:
+         print("FAILED FULL HOUSE")
+         print(rank_hand(get_hand("8D 7D 8C 7S 8H")))
 
-    if rank_hand(get_hand("8D 7D 8C 8S 8H"))[0] == BaseRanks.four_of_a_kind:
-        print("passed four of a kind")
-    else:
-        print("FAILED four of a kind")
+     if rank_hand(get_hand("8D 7D 8C 8S 8H"))[0] == BaseRanks.four_of_a_kind:
+         print("passed four of a kind")
+     else:
+         print("FAILED four of a kind")
 
-    if rank_hand(get_hand("8D 7D 9D TD JD"))[0] == BaseRanks.straight_flush:
-        print("passed straight flush")
-    else:
-        print("FAILED STRAIGHT FLUSH")
+     if rank_hand(get_hand("8D 7D 9D TD JD"))[0] == BaseRanks.straight_flush:
+         print("passed straight flush")
+     else:
+         print("FAILED STRAIGHT FLUSH")
 
 
 def main():
-    # with open("p054_pokertest.txt") as in_file:
-    #     text = in_file.read()
+     with open("p054_poker.txt") as in_file:
+         text = in_file.read()
 
-    # all_hands_string = re.findall("(.. .. .. .. ..) (.. .. .. .. ..)", text)
-    # all_hands = [(get_hand(hand1), get_hand(hand2)) for hand1, hand2 in all_hands_string]
+     all_hands_string = re.findall("(.. .. .. .. ..) (.. .. .. .. ..)", text)
+     all_hands = [(get_hand(hand1), get_hand(hand2)) for hand1, hand2 in all_hands_string]
 
-    unit_tests()
-    # print(all_hands)
+     # for hand1, hand2 in all_hands:
+     #    if rank_hand_int(hand1) > rank_hand_int(hand2):
+     #        print(hand1, " > ", hand2)
+     #    else:
+     #        print(hand1, " < ", hand2)
+     # unit_tests()
+     # print(all_hands)
+     # print(all_hands)
+     answer = sum(1 for hand1, hand2 in all_hands if rank_hand_int(hand1) > rank_hand_int(hand2))
+     print(answer)
 
 
 if __name__ == '__main__':
-    main()
+     main()
