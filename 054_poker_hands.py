@@ -40,14 +40,17 @@ def rank_hand(hand):
     base_rank = None
     secondary_rank = [card.value for card in hand]
 
+    # Flush
     if all(card.suit == hand[0].suit for card in hand):
         base_rank = BaseRanks.flush
 
+    # Straight
     if all(card.value == hand[i-1].value - 1 for i, card in enumerate(hand[1:], start=1)):
         if base_rank == BaseRanks.flush:
             base_rank = BaseRanks.straight_flush
         else:
             base_rank = BaseRanks.straight
+        return [int(base_rank)] + secondary_rank
 
     # Four of a kind
     for i, card in enumerate(hand[3:], start=3):
@@ -68,16 +71,20 @@ def rank_hand(hand):
         # If the cards is a triple, ignore it
         if base_rank == BaseRanks.three_of_a_kind and card.value == secondary_rank[0]:
             continue
+        # If it's a member of an already discovered pair, ignore it
         if base_rank == BaseRanks.one_pair and card.value == secondary_rank[0]:
             continue
 
+        # Bug if there's a 4 4 2 2 2
         if card.value == hand[i-1].value:
             if base_rank == BaseRanks.three_of_a_kind:
                 base_rank = BaseRanks.full_house
                 secondary_rank = [secondary_rank[0], card.value] + [c.value for c in hand if c.value != card.value and c.value != secondary_rank[0]]
+                return [int(base_rank)] + secondary_rank
             elif base_rank == BaseRanks.one_pair:
                 base_rank = BaseRanks.two_pairs
                 secondary_rank = [secondary_rank[0], card.value] + [c.value for c in hand if c.value != card.value and c.value != secondary_rank[0]]
+                return [int(base_rank)] + secondary_rank
             else:
                 base_rank = BaseRanks.one_pair
                 secondary_rank = [card.value] + [c.value for c in hand if c.value != card.value]
@@ -87,10 +94,12 @@ def rank_hand(hand):
 
     return [int(base_rank)] + secondary_rank # and others
 
+
 def rank_hand_int(hand):
     rank = rank_hand(hand)
-#    print(repr(rank[0]))
-    return sum((value*(100000**(10-i)) for i, value in enumerate(rank)))
+
+    return sum((value*(100000**(100-2*i)) for i, value in enumerate(rank)))
+
 
 def test_hand(hand_string, expected_rank):
     rank = rank_hand(get_hand(hand_string))
@@ -103,7 +112,8 @@ def test_hand(hand_string, expected_rank):
         print("Actual:", rank)
         print()
 
-def unit_tests2():
+
+def unit_tests():
     test_hand("8D 7D 9C TD KH", [int(BaseRanks.high_card), 13, 10, 9, 8, 7])
     test_hand("8D 7D 8C TD KH", [int(BaseRanks.one_pair), 8, 13, 10, 7])
     test_hand("8D KD 8C TD KH", [int(BaseRanks.two_pairs), 13, 8, 10])
@@ -114,30 +124,22 @@ def unit_tests2():
     test_hand("8D 7D 8C 8S 8H", [int(BaseRanks.four_of_a_kind), 8, 7])
     test_hand("8D 7D 9D TD JD", [int(BaseRanks.straight_flush), 11, 10, 9, 8, 7])
 
-def unit_tests():
-    rank = rank_hand(get_hand("AD 2D 3D 4D 5D"))
-    rank2 = rank_hand(get_hand("KD QD JD TD 8D"))
-    print(rank, rank2)
-    print(rank_hand_int(get_hand("AD 2D 3D 4D 5D")), rank_hand_int(get_hand("KD QD JD TD 8D")))
+    # Ensure that it doesn't interpret a full house as two pair
+    test_hand("4S 4H 4D 2S 2H", [int(BaseRanks.full_house), 4, 2])
+    test_hand("4S 4H 2S 2H 2D", [int(BaseRanks.full_house), 4, 2])
+
 
 def main():
-    # with open("p054_poker.txt") as in_file:
-    #     text = in_file.read()
+    # unit_tests()
 
-    # all_hands_string = re.findall("(.. .. .. .. ..) (.. .. .. .. ..)", text)
-    # all_hands = [(get_hand(hand1), get_hand(hand2)) for hand1, hand2 in all_hands_string]
+    with open("p054_poker.txt") as in_file:
+        text = in_file.read()
 
-    # for hand1, hand2 in all_hands:
-    #    if rank_hand_int(hand1) > rank_hand_int(hand2):
-    #        print(hand1, " > ", hand2)
-    #    else:
-    #        print(hand1, " < ", hand2)
-    unit_tests2()
-    # print(all_hands)
-    # print(all_hands)
-    # answer = sum(1 for hand1, hand2 in all_hands if rank_hand_int(hand1) > rank_hand_int(hand2))
-    # print(answer)
+    all_hands_string = re.findall("(.. .. .. .. ..) (.. .. .. .. ..)", text)
+    all_hands = [(get_hand(hand1), get_hand(hand2)) for hand1, hand2 in all_hands_string]
 
+    answer = sum(1 for hand1, hand2 in all_hands if rank_hand_int(hand1) > rank_hand_int(hand2))
+    print(answer)
 
 if __name__ == '__main__':
     main()
