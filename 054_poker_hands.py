@@ -52,6 +52,11 @@ def get_hand(hand_string):
 
 
 def rank_hand(hand):
+    """
+    Returns a tuple which represents the rank of the hand. Every hand's rank
+    can be compared to every other hand's rank to determine the winner using
+    the greater than operator.
+    """
     base_rank = None
     secondary_rank = [card.value for card in hand]
 
