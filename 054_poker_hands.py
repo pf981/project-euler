@@ -65,14 +65,14 @@ def rank_hand(hand):
             base_rank = BaseRanks.straight_flush
         else:
             base_rank = BaseRanks.straight
-        return [int(base_rank)] + secondary_rank
+        return tuple([int(base_rank)] + secondary_rank)
 
     # Four of a kind
     for i, card in enumerate(hand[3:], start=3):
         if card.value == hand[i-1].value == hand[i-2].value == hand[i-3].value:
             base_rank = BaseRanks.four_of_a_kind
             secondary_rank = [card.value] + [c.value for c in hand if c.value != card.value]
-            return [int(base_rank)] + secondary_rank
+            return tuple([int(base_rank)] + secondary_rank)
 
     # Three of a kind
     for i, card in enumerate(hand[2:], start=2):
@@ -95,11 +95,11 @@ def rank_hand(hand):
             if base_rank == BaseRanks.three_of_a_kind:
                 base_rank = BaseRanks.full_house
                 secondary_rank = [secondary_rank[0], card.value] + [c.value for c in hand if c.value != card.value and c.value != secondary_rank[0]]
-                return [int(base_rank)] + secondary_rank
+                return tuple([int(base_rank)] + secondary_rank)
             elif base_rank == BaseRanks.one_pair:
                 base_rank = BaseRanks.two_pairs
                 secondary_rank = [secondary_rank[0], card.value] + [c.value for c in hand if c.value != card.value and c.value != secondary_rank[0]]
-                return [int(base_rank)] + secondary_rank
+                return tuple([int(base_rank)] + secondary_rank)
             else:
                 base_rank = BaseRanks.one_pair
                 secondary_rank = [card.value] + [c.value for c in hand if c.value != card.value]
@@ -107,17 +107,7 @@ def rank_hand(hand):
     if not base_rank:
         base_rank = BaseRanks.high_card
 
-    return [int(base_rank)] + secondary_rank # and others
-
-
-def rank_hand_int(hand):
-    """
-    Returns an integer representation of the hands value. Higher valued hands
-    beat lower valued hands
-    """
-    rank = rank_hand(hand)
-    # This makes the elements of rank that are closer to the front more significant
-    return sum((value*(100000**(100-2*i)) for i, value in enumerate(rank)))
+    return tuple([int(base_rank)] + secondary_rank)
 
 
 def test_hand(hand_string, expected_rank):
@@ -161,7 +151,7 @@ def main():
     all_hands_string = re.findall("(.. .. .. .. ..) (.. .. .. .. ..)", text)
     all_hands = [(get_hand(hand1), get_hand(hand2)) for hand1, hand2 in all_hands_string]
 
-    answer = sum(1 for hand1, hand2 in all_hands if rank_hand_int(hand1) > rank_hand_int(hand2))
+    answer = sum(1 for hand1, hand2 in all_hands if rank_hand(hand1) > rank_hand(hand2))
     print(answer)
 
 if __name__ == '__main__':
