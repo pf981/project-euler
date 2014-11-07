@@ -11,7 +11,7 @@ def find_valid_path(tree):
         # nodes_to_visit is a list of tuples. The first element of the tuple
         # is the node to visit. The second is a list representing the path
         # taken to get to that node.
-        nodes_to_visit = [(node, [])]
+        nodes_to_visit = [(node, set())]
 
         # print(node)
         while nodes_to_visit:
@@ -19,7 +19,12 @@ def find_valid_path(tree):
             print("@", cur_node)
             for child in tree[cur_node[0]]:
                 # Prepend the node and the path
-                nodes_to_visit.insert(0, (child, cur_node[1] + [cur_node[0]]))
+                print(child, cur_node[1], cur_node[0])
+                print(nodes_to_visit)
+                nodes_to_visit.insert(0, (child, cur_node[1] | {cur_node[0]}))
+                # nodes_to_visit.insert(0, (child, set(cur_node[1])))
+                # nodes_to_visit.insert(0, (child, cur_node[1].union(set(cur_node[0]))))
+                # nodes_to_visit.insert(0, (child, cur_node[1] | set(cur_node[0])))
             # nodes_to_visit = tree[cur_node] + nodes_to_visit
 
 
@@ -45,7 +50,7 @@ def is_cat_pair(pair):
     return isprime(concat_ints(pair[0], pair[1]))
 
 def main():
-    find_valid_path({1: [2], 2: [3, 4], 3: [], 4: []})
+    find_valid_path({1: set([2]), 2: set([3, 4]), 3: set(), 4: set()})
     return
     primes = list(sympy.sieve.primerange(2, MAX_PRIMES))
 
