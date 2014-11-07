@@ -11,11 +11,6 @@ def main():
 
     min_distance = None
     for denominator in range(1, MAX_DENOMINATOR + 1):
-        # If we are looking at the same denominator as the number we are trying to find
-        if denominator == target.denominator:
-            # This will just produce the target, which is not what we want
-            continue
-
         # 3/7 = x/d => x = d*3/7
         # By rounding down x, x/d will be the closest approximation to 3/7
         # that this denominator can provide
