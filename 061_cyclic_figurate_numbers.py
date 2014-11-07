@@ -1,20 +1,15 @@
-#import itertools
+import itertools
 import collections
 #import copy
 
 # How many cyclic numbers we are trying to find
 TARGET_NUMBERS = 3
 
-
-# FIXME: Infinite loop
 def generate_valid_paths(tree):
     """
     This generates paths from a depth-first tree traversal such that the path
-    is TARGET_PAIRS long and every element is adjacent to every other element
+    is TARGET_NUMBERS long
     """
-    #for node, _ in tree.items():
-    # keys = list(tree.keys())
-
     # We use list(keys) here to get a deep copy. An error occured when using copy.copy(keys)
     for node in list(tree.keys()):
         # nodes_to_visit is a list of tuples. The first element of the tuple
@@ -32,20 +27,13 @@ def generate_valid_paths(tree):
                 continue
 
             for child in tree[cur_node[0]]:
-                # If the child hasn't been visited and the child contains
-                # every element in the path
-                # if child not in cur_path:
                 # Prepend the node and the path
                 nodes_to_visit.insert(0, (child, cur_path))
 
             if len(cur_path) == TARGET_NUMBERS:
                 yield cur_path
-# FIXME: USE LIST
 
 def main():
-    # Maybe map every two digit number to pentagonal numbers that start with those digits
-    # generate_cycle(8128)
-
     triangles = {n*(n+1)//2 for n in range(100)}
     squares = {n*n for n in range(100)}
     pentagons = {n*(3*n-1)//2 for n in range(100)}
@@ -61,8 +49,16 @@ def main():
         if num in polygonals:
             cycle_map[str(num)[:2]].add(str(num)[2:])
 
-    for path in generate_valid_paths(cycle_map):
-        print(path)
+
+    cyclic_set = [(int(a + b), int(b + c), int(c + d))
+                  for a, b, c in generate_valid_paths(cycle_map)
+                  for d in cycle_map[c]]
+
+    print(cyclic_set)
+    # for path in generate_valid_paths(cycle_map):
+    #     for pemutation in itertools.permutations(path):
+    #         if
+
 
     # print(cycle_map)
         # # If the second last digit is zero, then at least one of the cycles will not be
