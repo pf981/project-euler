@@ -34,13 +34,17 @@ def generate_valid_paths(tree):
                 yield cur_path
 
 def main():
-    triangles = {n*(n+1)//2 for n in range(100)}
-    squares = {n*n for n in range(100)}
-    pentagons = {n*(3*n-1)//2 for n in range(100)}
-    hexagons = {n*(2*n-1) for n in range(100)}
-    heptagons = {n*(5*n-3)//2 for n in range(100)}
-    octagons = {n*(3*n-2) for n in range(100)}
+    triangles = {n*(n+1)//2 for n in range(1000)}
+    squares = {n*n for n in range(1000)}
+    pentagons = {n*(3*n-1)//2 for n in range(1000)}
+    hexagons = {n*(2*n-1) for n in range(1000)}
+    heptagons = {n*(5*n-3)//2 for n in range(1000)}
+    octagons = {n*(3*n-2) for n in range(1000)}
     polygonals = triangles | squares | pentagons | hexagons | heptagons | octagons
+
+    # print(triangles)
+    # print(8128 in triangles)
+    # return
 
     # Maps the first two digits to the last two digits
     cycle_map = collections.defaultdict(set)
@@ -50,14 +54,22 @@ def main():
             cycle_map[str(num)[:2]].add(str(num)[2:])
 
 
-    cyclic_set = [(int(a + b), int(b + c), int(c + d))
+    cyclic_sets = [(int(a + b), int(b + c), int(c + d))
                   for a, b, c in generate_valid_paths(cycle_map)
                   for d in cycle_map[c]]
 
-    print(cyclic_set)
-    # for path in generate_valid_paths(cycle_map):
-    #     for pemutation in itertools.permutations(path):
-    #         if
+    # print(cyclic_sets)
+    for cyclic_set in cyclic_sets:
+        for permutation in itertools.permutations(cyclic_set):
+            # if cyclic_set == (8128, 2882, 8281):
+            #     print("!!")
+            #     print(permutation[0], permutation[0] in triangles)
+            #     print(permutation[1], permutation[1] in squares)
+            #     print(permutation[2], permutation[2] in pentagons)
+            if permutation[0] in triangles and \
+               permutation[1] in squares and \
+               permutation[2] in pentagons:
+                print(cyclic_set)
 
 
     # print(cycle_map)
