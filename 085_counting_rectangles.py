@@ -39,7 +39,8 @@ def main():
                               for height in range(MAX_LENGTH)),
                              key=lambda x: abs(num_fitting_rectangles(x) - 2000000))
 
-    print(optimal_dimensions[0] * optimal_dimensions[1])
+    answer = optimal_dimensions[0] * optimal_dimensions[1]
+    print(answer)
 
 if __name__ == '__main__':
     main()
