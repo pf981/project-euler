@@ -6,6 +6,38 @@ from sympy.ntheory.primetest import isprime
 MAX_PRIMES = 20
 TARGET_PAIRS = 4
 
+def find_valid_path(tree):
+    for node, _ in tree.items():
+        # nodes_to_visit is a list of tuples. The first element of the tuple
+        # is the node to visit. The second is a list representing the path
+        # taken to get to that node.
+        nodes_to_visit = [(node, [])]
+
+        # print(node)
+        while nodes_to_visit:
+            cur_node = nodes_to_visit.pop()
+            print("@", cur_node)
+            for child in tree[cur_node[0]]:
+                # Prepend the node and the path
+                nodes_to_visit.insert(0, (child, cur_node[1] + [cur_node[0]]))
+            # nodes_to_visit = tree[cur_node] + nodes_to_visit
+
+
+            print(cur_node, nodes_to_visit)
+        break
+
+
+# def find_valid_path(tree):
+#     for node, _ in tree.items():
+#         nodes_to_visit = [node]
+#         cur_path = [node]
+
+#         # print(node)
+#         while nodes_to_visit:
+#             cur_node = nodes_to_visit.pop()
+#             nodes_to_visit = tree[cur_node] + nodes_to_visit
+#             print(cur_node, nodes_to_visit)
+
 def concat_ints(a, b):
     return int(str(a) + str(b))
 
@@ -13,6 +45,8 @@ def is_cat_pair(pair):
     return isprime(concat_ints(pair[0], pair[1]))
 
 def main():
+    find_valid_path({1: [2], 2: [3, 4], 3: [], 4: []})
+    return
     primes = list(sympy.sieve.primerange(2, MAX_PRIMES))
 
     all_pairs = [(p1, p2)
@@ -43,13 +77,14 @@ def main():
     #        3
     #   7   109    67
 
-    for a in primes:
-        final_primes = copy.copy(paired_with[a])
-        for b in paired_with[a]:
-            if b not in final_primes:
-                continue
-            final_primes &= paired_with[b]
-        print(final_primes)
+    find_valid_path(paired_with)
+    # for a in primes:
+    #     final_primes = copy.copy(paired_with[a])
+    #     for b in paired_with[a]:
+    #         if b not in final_primes:
+    #             continue
+    #         final_primes &= paired_with[b]
+    #     print(final_primes)
 
 
     # FIXME: Could trim the set by only considering primes who have 5 or more paired primes
