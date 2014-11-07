@@ -17,6 +17,10 @@ def generate_valid_paths(tree):
             cur_path = cur_node[1] | {cur_node[0]}
 
             for child in tree[cur_node[0]]:
+                # If the child is not adjacent to every element in the path
+                if not all(child in tree[path_node] for path_node in cur_path):
+                    continue
+
                 # If the child hasn't been visited and the child contains
                 # every element in the path
                 if child not in cur_path and tree[child] >= cur_path:
@@ -47,7 +51,12 @@ def main():
         if is_cat_pair((p1, p2)):
             paired_with[p1].add(p2)
 
-    answer = min(generate_valid_paths(paired_with), key=lambda x: sum(x))
+    best_set = min(generate_valid_paths(paired_with), key=lambda x: sum(x))
+    # FIXME: These don't satisfy everything...
+    print(best_set)
+    for p in best_set:
+        print(p, paired_with[p])
+    answer = sum(best_set)
     print(answer)
 
 if __name__ == '__main__':
