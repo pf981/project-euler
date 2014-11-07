@@ -1,3 +1,5 @@
+# This brute force approach takes too long to compute. See
+# 073_counting_fractions_in_a_range2.py for a better approach
 from fractions import Fraction
 
 MAX_DENOMINATOR = 12000
