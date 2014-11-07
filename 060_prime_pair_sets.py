@@ -2,8 +2,8 @@ import collections
 import sympy
 from sympy.ntheory.primetest import isprime
 
-MAX_PRIMES = 1000
-TARGET_PAIRS = 4
+MAX_PRIMES = 10000
+TARGET_PAIRS = 5
 
 def generate_valid_paths(tree):
     for node, _ in tree.items():
