@@ -34,6 +34,13 @@ def generate_valid_paths(tree):
                 yield cur_path
 
 def compute_six_cyclic_set():
+    """
+    Returns a 6 element list representing that is the cyclic set where each
+    element is polygonal
+    """
+    # polygonals[0] is the set of all triangulars etc.
+    # In order: triangulars, squares, pentagonals, hexagonals, heptagonals,
+    # octagonals
     polygonals = [{n*(n+1)//2 for n in range(1000)},
                   {n*n for n in range(1000)},
                   {n*(3*n-1)//2 for n in range(1000)},
@@ -41,16 +48,19 @@ def compute_six_cyclic_set():
                   {n*(5*n-3)//2 for n in range(1000)},
                   {n*(3*n-2) for n in range(1000)}]
 
+    # Merge them into a single set, so it is easier to determine if a number
+    # is in any of them
     polygonals_together = frozenset(itertools.chain(*polygonals))
 
-    # Maps the first two digits to the last two digits
+    # For each of the four-digit polygonal numbers, map the first two digits
+    # to the last two digits
     cycle_map = collections.defaultdict(set)
-
     for num in range(1000, 10000):
         if num in polygonals_together:
             cycle_map[str(num)[:2]].add(str(num)[2:])
 
-    # Convert the two-digit string maps to integers
+    # Generate every six-long set of cyclic polygonals and convert the
+    # two-digit string maps to integers. Ie cycle_map['81'] == '28' -> 8128
     # Ensure that each of the numbers is four digits
     cyclic_sets = []
     for path in generate_valid_paths(cycle_map):
@@ -61,7 +71,11 @@ def compute_six_cyclic_set():
         if all(len(str(num)) == 4 for num in cyclic_set):
             cyclic_sets.append(cyclic_set)
 
+    # Find which of the candidate sets contains all different
+    # polygonals. E.g. not all triangular numbers
     for cyclic_set in cyclic_sets:
+        # To do this, just permute the set and check if the first is
+        # triangular, the second is square etc
         for permutation in itertools.permutations(cyclic_set):
             if all(permutation[i] in polygonals[i] for i in range(6)):
                 return cyclic_set
