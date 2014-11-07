@@ -3,7 +3,7 @@ import copy
 import sympy
 from sympy.ntheory.primetest import isprime
 
-MAX_PRIMES = 20
+MAX_PRIMES = 1000
 TARGET_PAIRS = 4
 
 def find_valid_path(tree):
@@ -13,22 +13,21 @@ def find_valid_path(tree):
         # taken to get to that node.
         nodes_to_visit = [(node, set())]
 
-        # print(node)
         while nodes_to_visit:
             cur_node = nodes_to_visit.pop()
-
             cur_path = cur_node[1] | {cur_node[0]}
-            # print("@", cur_node)
+
             for child in tree[cur_node[0]]:
                 # If the child hasn't been visited and the child contains
                 # every element in the path
                 if child not in cur_path and tree[child] >= cur_path:
-                    print(child, "contains", cur_path)
                     # Prepend the node and the path
                     nodes_to_visit.insert(0, (child, cur_path))
 
-            print(cur_node, nodes_to_visit)
-        break
+            # print(cur_node, cur_path)
+            if len(cur_path) == TARGET_PAIRS:
+                print(cur_path)
+        # break
 
 # def find_valid_path(tree):
 #     for node, _ in tree.items():
@@ -71,8 +70,8 @@ def is_cat_pair(pair):
     return isprime(concat_ints(pair[0], pair[1]))
 
 def main():
-    find_valid_path({1: {2}, 2: {1, 3, 4}, 3: {1, 2}, 4: set()})
-    return
+    # find_valid_path({1: {2}, 2: {1, 3, 4}, 3: {1, 2}, 4: set()})
+    # return
     primes = list(sympy.sieve.primerange(2, MAX_PRIMES))
 
     all_pairs = [(p1, p2)
