@@ -1,8 +1,9 @@
 import collections
+import copy
 import sympy
 from sympy.ntheory.primetest import isprime
 
-MAX_PRIMES = 10
+MAX_PRIMES = 20
 TARGET_PAIRS = 4
 
 def concat_ints(a, b):
@@ -10,39 +11,60 @@ def concat_ints(a, b):
 
 def is_cat_pair(pair):
     return isprime(concat_ints(pair[0], pair[1]))
-    # return isprime(concat_ints(pair[0], pair[1])) and isprime(concat_ints(pair[0], pair[1]))
 
 def main():
     primes = list(sympy.sieve.primerange(2, MAX_PRIMES))
 
-    # all_pairs is a list of tuples of every combination of primes
-    # FIXME: Maybe do all combinations, but only check the left concatenation
     all_pairs = [(p1, p2)
              for p1 in primes
              for p2 in primes]
-    # all_pairs = [(p1, p2)
-    #          for i, p1 in enumerate(primes)
-    #          for p2 in primes[i+1:]]
 
-    # special_pairs is a subset of all_pairs which only contains elements
-    # whose pair can be concatenated to form a prime
-    # paired_with = {p1: p2 for p1, p2 in all_pairs if is_cat_pair((p1, p2))}
-    paired_with = collections.defaultdict(list)
+    # paired_with maps a prime to a list of primes. This means that all the
+    # elements in the value can be appended to the key to form a prime
+    # paired_with[2] = [3, 11, 23] means that 23, 211 and 223 are all primes
+    paired_with = collections.defaultdict(set)
     for p1, p2 in all_pairs:
         if is_cat_pair((p1, p2)):
-            paired_with[p1].append(p2)
+            paired_with[p1].add(p2)
+    # paired_with = collections.defaultdict(list)
+    # for p1, p2 in all_pairs:
+    #     if is_cat_pair((p1, p2)):
+    #         paired_with[p1].append(p2)
 
-    print(paired_with)
+    # print(paired_with)
+
+    # Want:
+    # 3  : 7 109 673
+    # 7  : 3 109 673
+    # 109: 3 7   673
+    # 673: 3 7   109
+
+    # THIS IS A TREE!!! - then maybe the pairs should be both concatenate so the tree is unidirectional
+    #        3
+    #   7   109    67
+
+    for a in primes:
+        final_primes = copy.copy(paired_with[a])
+        for b in paired_with[a]:
+            if b not in final_primes:
+                continue
+            final_primes &= paired_with[b]
+        print(final_primes)
 
 
-    # special_pairs = [pair for pair in all_pairs if is_cat_pair(pair)]
-
+    # FIXME: Could trim the set by only considering primes who have 5 or more paired primes
     # for starter in primes:
-    #     final_primes = [starter].extend(paired_with[starter])
-    #     print(started, final_primes)
+    #     final_primes = copy.copy(paired_with[starter])
+    #     for other in paired_with[starter]:
+    #         if other not in final_primes:
+    #             continue
+    #         final_primes &= paired_with[other]
+    #     print(final_primes)
 
+        # final_primes = [starter] + paired_with[starter]
+        # for other in final_primes:
 
-    # print(special_pairs)
+        # print(starter, final_primes)
 
     print(primes)
     # print(pairs)
