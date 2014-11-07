@@ -1,6 +1,9 @@
 import itertools
 import math
 
+# Cache factorial computations
+FACTORIALS = [math.factorial(n) for n in range(10)]
+
 def get_chain_length(n, non_repeating_terms):
     # Keep track of the current term and the last term to determine if the
     # current term is repeating itself
@@ -15,7 +18,7 @@ def get_chain_length(n, non_repeating_terms):
             return non_repeating_terms[n]
 
         prev_term = cur_term
-        cur_term = sum(math.factorial(int(digit)) for digit in str(cur_term))
+        cur_term = sum(FACTORIALS[int(digit)] for digit in str(cur_term))
 
         # If this term repeats itself
         if cur_term == prev_term:
