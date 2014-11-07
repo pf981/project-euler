@@ -1,24 +1,37 @@
+# Instead of generating all fractions, it just looks at one fraction per
+# denominator. The numerator is constructed such that the fraction forms the
+# closest possible fraction to 3/7. The answer is just the fraction that is
+# the closest to the target.
 from fractions import Fraction
 
 MAX_DENOMINATOR = 1000000
 
 def main():
     target = Fraction(3, 7)
-    candidate_denominators = (d for d in range(1, MAX_DENOMINATOR + 1) if d != target.denominator)
 
-    min_distance = 99
-    for candidate_denominator in candidate_denominators:
-        numerator = int(candidate_denominator * target)
-        candidate_fraction = Fraction(numerator, candidate_denominator)
+    min_distance = None
+    for denominator in range(1, MAX_DENOMINATOR + 1):
+        # If we are looking at the same denominator as the number we are trying to find
+        if denominator == target.denominator:
+            # This will just produce the target, which is not what we want
+            continue
 
-        if candidate_fraction >= target:
-            candidate_fraction = Fraction(numerator - 1, candidate_denominator)
+        # 3/7 = x/d => x = d*3/7
+        # By rounding down x, x/d will be the closest approximation to 3/7
+        # that this denominator can provide
+        numerator = int(denominator * target)
+        fraction = Fraction(numerator, denominator)
 
-        distance = target - candidate_fraction
+        # We want the fraction to be to the left (smaller) than the target
+        if fraction >= target:
+            # By construction, this is guaranteed to make fraction < target
+            fraction = Fraction(numerator - 1, denominator)
 
-        if distance < min_distance:
+        distance = target - fraction
+
+        if not min_distance or distance < min_distance:
             min_distance = distance
-            answer = candidate_fraction
+            answer = fraction
 
     print(answer)
 
