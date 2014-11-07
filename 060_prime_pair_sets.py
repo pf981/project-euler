@@ -1,12 +1,11 @@
 import collections
-import copy
 import sympy
 from sympy.ntheory.primetest import isprime
 
 MAX_PRIMES = 1000
 TARGET_PAIRS = 4
 
-def find_valid_path(tree):
+def generate_valid_paths(tree):
     for node, _ in tree.items():
         # nodes_to_visit is a list of tuples. The first element of the tuple
         # is the node to visit. The second is a list representing the path
@@ -25,7 +24,7 @@ def find_valid_path(tree):
                     nodes_to_visit.insert(0, (child, cur_path))
 
             if len(cur_path) == TARGET_PAIRS:
-                print(cur_path)
+                yield cur_path
 
 def concat_ints(a, b):
     return int(str(a) + str(b))
@@ -48,7 +47,8 @@ def main():
         if is_cat_pair((p1, p2)):
             paired_with[p1].add(p2)
 
-    find_valid_path(paired_with)
+    answer = min(generate_valid_paths(paired_with), key=lambda x: sum(x))
+    print(answer)
 
 if __name__ == '__main__':
     main()
