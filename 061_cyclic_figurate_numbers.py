@@ -3,7 +3,7 @@ import collections
 #import copy
 
 # How many cyclic numbers we are trying to find
-TARGET_NUMBERS = 3
+TARGET_NUMBERS = 6
 
 def generate_valid_paths(tree):
     """
@@ -54,31 +54,24 @@ def main():
             cycle_map[str(num)[:2]].add(str(num)[2:])
 
 
-    cyclic_sets = [(int(a + b), int(b + c), int(c + a))
-                  for a, b, c in generate_valid_paths(cycle_map)
+    # Convert the two-digit string maps to integers
+    # Ensure that each of the numbers is four digits
+    cyclic_sets = [(int(a + b), int(b + c), int(c + d), int(d + e), int(e + f), int(f + a))
+                  for a, b, c, d, e, f in generate_valid_paths(cycle_map)
                   if len(str(int(a + b))) == len(str(int(b + c))) == len(str(int(c + a))) == 4]
-                  # if a == 'a']
+    # cyclic_sets = [(int(a + b), int(b + c), int(c + a))
+    #               for a, b, c in generate_valid_paths(cycle_map)
+    #               if len(str(int(a + b))) == len(str(int(b + c))) == len(str(int(c + a))) == 4]
 
-    # print(cyclic_sets)
     for cyclic_set in cyclic_sets:
         for permutation in itertools.permutations(cyclic_set):
-            # if cyclic_set == (8128, 2882, 8281):
-            #     print("!!")
-            #     print(permutation[0], permutation[0] in triangles)
-            #     print(permutation[1], permutation[1] in squares)
-            #     print(permutation[2], permutation[2] in pentagons)
             if permutation[0] in triangles and \
                permutation[1] in squares and \
-               permutation[2] in pentagons:
-                print(cyclic_set)
-
-
-    # print(cycle_map)
-        # # If the second last digit is zero, then at least one of the cycles will not be
-        # # four digits
-        # if str(num)[-2]:
-        #     continue
-        # print(num)
+               permutation[2] in pentagons and \
+               permutation[3] in hexagons and \
+               permutation[4] in heptagons and \
+               permutation[5] in octagons:
+                print(cyclic_set, sum(cyclic_set))
 
 if __name__ == '__main__':
     main()
