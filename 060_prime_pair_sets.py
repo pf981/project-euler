@@ -6,6 +6,10 @@ MAX_PRIMES = 10000
 TARGET_PAIRS = 5
 
 def generate_valid_paths(tree):
+    """
+    This generates paths from a depth-first tree traversal such that the path
+    is TARGET_PAIRS long and every element is adjacent to every other element
+    """
     for node, _ in tree.items():
         # nodes_to_visit is a list of tuples. The first element of the tuple
         # is the node to visit. The second is a list representing the path
@@ -52,11 +56,9 @@ def main():
             paired_with[p1].add(p2)
 
     best_set = min(generate_valid_paths(paired_with), key=lambda x: sum(x))
-    # FIXME: These don't satisfy everything...
-    print(best_set)
-    for p in best_set:
-        print(p, paired_with[p])
     answer = sum(best_set)
+
+    print(best_set)
     print(answer)
 
 if __name__ == '__main__':
