@@ -4,10 +4,11 @@ import re
 import sympy
 
 def any_length_combinations(l):
-    combinations = []
-    for i in range(len(l)):
-        combinations += itertools.combinations(l, i+1)
-    return combinations[:-1]
+    # combinations = []
+    # for i in range(len(l)):
+    #     combinations += itertools.combinations(l, i+1)
+    # return combinations[:-1]
+    return itertools.combinations(l, 3)
 
 def main():
     # print(re.match(r"4(.)\1", "433"))
@@ -16,20 +17,27 @@ def main():
     # print(re.match(r"(.)\g<1>", "334"))
     # return
     # For each possible length digit
-    digits = 1
+    # digits = 1
+    digits = 6
     while(True):
+        print("Generating", digits, "digit primes")
+
         # Generate the primes of that digit length
         primes = list(sympy.sieve.primerange(10**(digits-1), 10**digits))
 
-        # Get all combinations of which indexes to keep
-        combinations = any_length_combinations(range(digits))
+        print("Finished generating")
 
+        # Get all combinations of which indexes to keep
+        combinations = list(any_length_combinations(range(digits)))
+        print(combinations)
         # test = ["(.)", "\\0"]
         # print("".join(test))
         # return
-
+        used_regex = set()
         for candidate in primes:
+            print("Candidate:", candidate)
             for combination in combinations:
+                # print("Trying combination", combination)
                 matches = []
 
                 # This is the regex that will make all the indexes in combination wildcards
@@ -38,6 +46,10 @@ def main():
                 for i in combination[1:]:
                     regex[i] = '\\1{1}'
                 regex = "".join(regex)
+
+                if regex in used_regex:
+                    continue
+                used_regex.add(regex)
 
                 for prime in primes:
                     if re.match(regex, str(prime)):
