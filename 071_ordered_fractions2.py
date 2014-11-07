@@ -27,7 +27,7 @@ def main():
         # We are trying to find the fraction that is the closest to the target
         if not min_distance or distance < min_distance:
             min_distance = distance
-            answer = fraction
+            answer = fraction.numerator
 
     print(answer)
 
