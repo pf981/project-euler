@@ -1,30 +1,42 @@
 #import itertools
 import collections
+#import copy
 
 # How many cyclic numbers we are trying to find
 TARGET_NUMBERS = 3
 
+
+# FIXME: Infinite loop
 def generate_valid_paths(tree):
     """
     This generates paths from a depth-first tree traversal such that the path
     is TARGET_PAIRS long and every element is adjacent to every other element
     """
-    for node, _ in tree.items():
+    #for node, _ in tree.items():
+    # keys = list(tree.keys())
+
+    # We use list(keys) here to get a deep copy. An error occured when using copy.copy(keys)
+    for node in list(tree.keys()):
         # nodes_to_visit is a list of tuples. The first element of the tuple
         # is the node to visit. The second is a list representing the path
         # taken to get to that node.
-        nodes_to_visit = [(node, set())]
+        nodes_to_visit = [(node, [])]
 
         while nodes_to_visit:
             cur_node = nodes_to_visit.pop()
-            cur_path = cur_node[1] | {cur_node[0]}
+            cur_path = cur_node[1] + [cur_node[0]]
+
+            # If the path is longer than we need
+            if len(cur_path) > TARGET_NUMBERS:
+                # Don't bother
+                continue
 
             for child in tree[cur_node[0]]:
                 # If the child hasn't been visited and the child contains
                 # every element in the path
-                if child not in cur_path:
-                    # Prepend the node and the path
-                    nodes_to_visit.insert(0, (child, cur_path))
+                # if child not in cur_path:
+                # Prepend the node and the path
+                nodes_to_visit.insert(0, (child, cur_path))
 
             if len(cur_path) == TARGET_NUMBERS:
                 yield cur_path
