@@ -24,44 +24,8 @@ def find_valid_path(tree):
                     # Prepend the node and the path
                     nodes_to_visit.insert(0, (child, cur_path))
 
-            # print(cur_node, cur_path)
             if len(cur_path) == TARGET_PAIRS:
                 print(cur_path)
-        # break
-
-# def find_valid_path(tree):
-#     for node, _ in tree.items():
-#         # nodes_to_visit is a list of tuples. The first element of the tuple
-#         # is the node to visit. The second is a list representing the path
-#         # taken to get to that node.
-#         nodes_to_visit = [(node, set())]
-
-#         # print(node)
-#         while nodes_to_visit:
-#             cur_node = nodes_to_visit.pop()
-#             # print("@", cur_node)
-#             for child in tree[cur_node[0]]:
-#                 # If the child hasn't been visited and the child contains
-#                 # every element in the path
-#                 if child not in cur_node[1] and tree[child] >= cur_node[1]:
-#                     print(child, "contains", cur_node[1])
-#                     # Prepend the node and the path
-#                     nodes_to_visit.insert(0, (child, cur_node[1] | {cur_node[0]}))
-
-#             print(cur_node, nodes_to_visit)
-#         break
-
-
-# def find_valid_path(tree):
-#     for node, _ in tree.items():
-#         nodes_to_visit = [node]
-#         cur_path = [node]
-
-#         # print(node)
-#         while nodes_to_visit:
-#             cur_node = nodes_to_visit.pop()
-#             nodes_to_visit = tree[cur_node] + nodes_to_visit
-#             print(cur_node, nodes_to_visit)
 
 def concat_ints(a, b):
     return int(str(a) + str(b))
@@ -70,8 +34,6 @@ def is_cat_pair(pair):
     return isprime(concat_ints(pair[0], pair[1]))
 
 def main():
-    # find_valid_path({1: {2}, 2: {1, 3, 4}, 3: {1, 2}, 4: set()})
-    # return
     primes = list(sympy.sieve.primerange(2, MAX_PRIMES))
 
     all_pairs = [(p1, p2)
@@ -85,51 +47,8 @@ def main():
     for p1, p2 in all_pairs:
         if is_cat_pair((p1, p2)):
             paired_with[p1].add(p2)
-    # paired_with = collections.defaultdict(list)
-    # for p1, p2 in all_pairs:
-    #     if is_cat_pair((p1, p2)):
-    #         paired_with[p1].append(p2)
-
-    # print(paired_with)
-
-    # Want:
-    # 3  : 7 109 673
-    # 7  : 3 109 673
-    # 109: 3 7   673
-    # 673: 3 7   109
-
-    # THIS IS A TREE!!! - then maybe the pairs should be both concatenate so the tree is unidirectional
-    #        3
-    #   7   109    67
 
     find_valid_path(paired_with)
-    # for a in primes:
-    #     final_primes = copy.copy(paired_with[a])
-    #     for b in paired_with[a]:
-    #         if b not in final_primes:
-    #             continue
-    #         final_primes &= paired_with[b]
-    #     print(final_primes)
-
-
-    # FIXME: Could trim the set by only considering primes who have 5 or more paired primes
-    # for starter in primes:
-    #     final_primes = copy.copy(paired_with[starter])
-    #     for other in paired_with[starter]:
-    #         if other not in final_primes:
-    #             continue
-    #         final_primes &= paired_with[other]
-    #     print(final_primes)
-
-        # final_primes = [starter] + paired_with[starter]
-        # for other in final_primes:
-
-        # print(starter, final_primes)
-
-    print(primes)
-    # print(pairs)
-
-    pass
 
 if __name__ == '__main__':
     main()
