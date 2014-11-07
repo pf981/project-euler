@@ -54,9 +54,10 @@ def main():
             cycle_map[str(num)[:2]].add(str(num)[2:])
 
 
-    cyclic_sets = [(int(a + b), int(b + c), int(c + d))
+    cyclic_sets = [(int(a + b), int(b + c), int(c + a))
                   for a, b, c in generate_valid_paths(cycle_map)
-                  for d in cycle_map[c]]
+                  if len(str(int(a + b))) == len(str(int(b + c))) == len(str(int(c + a))) == 4]
+                  # if a == 'a']
 
     # print(cyclic_sets)
     for cyclic_set in cyclic_sets:
