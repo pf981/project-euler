@@ -33,45 +33,43 @@ def generate_valid_paths(tree):
             if len(cur_path) == TARGET_NUMBERS:
                 yield cur_path
 
-def main():
-    triangles = {n*(n+1)//2 for n in range(1000)}
-    squares = {n*n for n in range(1000)}
-    pentagons = {n*(3*n-1)//2 for n in range(1000)}
-    hexagons = {n*(2*n-1) for n in range(1000)}
-    heptagons = {n*(5*n-3)//2 for n in range(1000)}
-    octagons = {n*(3*n-2) for n in range(1000)}
-    polygonals = triangles | squares | pentagons | hexagons | heptagons | octagons
+def compute_six_cyclic_set():
+    polygonals = [{n*(n+1)//2 for n in range(1000)},
+                  {n*n for n in range(1000)},
+                  {n*(3*n-1)//2 for n in range(1000)},
+                  {n*(2*n-1) for n in range(1000)},
+                  {n*(5*n-3)//2 for n in range(1000)},
+                  {n*(3*n-2) for n in range(1000)}]
 
-    # print(triangles)
-    # print(8128 in triangles)
-    # return
+    polygonals_together = frozenset(itertools.chain(*polygonals))
 
     # Maps the first two digits to the last two digits
     cycle_map = collections.defaultdict(set)
 
     for num in range(1000, 10000):
-        if num in polygonals:
+        if num in polygonals_together:
             cycle_map[str(num)[:2]].add(str(num)[2:])
-
 
     # Convert the two-digit string maps to integers
     # Ensure that each of the numbers is four digits
-    cyclic_sets = [(int(a + b), int(b + c), int(c + d), int(d + e), int(e + f), int(f + a))
-                  for a, b, c, d, e, f in generate_valid_paths(cycle_map)
-                  if len(str(int(a + b))) == len(str(int(b + c))) == len(str(int(c + a))) == 4]
-    # cyclic_sets = [(int(a + b), int(b + c), int(c + a))
-    #               for a, b, c in generate_valid_paths(cycle_map)
-    #               if len(str(int(a + b))) == len(str(int(b + c))) == len(str(int(c + a))) == 4]
+    cyclic_sets = []
+    for path in generate_valid_paths(cycle_map):
+        cyclic_set = [int(path[i] + path[i+1]) for i in range(len(path) - 1)]
+        cyclic_set.append(int(path[-1] + path[0]))
+
+        # Ensure that all elements are 4 digits
+        if all(len(str(num)) == 4 for num in cyclic_set):
+            cyclic_sets.append(cyclic_set)
 
     for cyclic_set in cyclic_sets:
         for permutation in itertools.permutations(cyclic_set):
-            if permutation[0] in triangles and \
-               permutation[1] in squares and \
-               permutation[2] in pentagons and \
-               permutation[3] in hexagons and \
-               permutation[4] in heptagons and \
-               permutation[5] in octagons:
-                print(cyclic_set, sum(cyclic_set))
+            if all(permutation[i] in polygonals[i] for i in range(6)):
+                return cyclic_set
+
+def main():
+    cyclic_set = compute_six_cyclic_set()
+    answer = sum(cyclic_set)
+    print(answer)
 
 if __name__ == '__main__':
     main()
