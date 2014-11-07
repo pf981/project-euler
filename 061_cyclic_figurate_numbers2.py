@@ -12,7 +12,7 @@ import collections
 TARGET_NUMBERS = 6
 
 def traverse_path(node, path, tree):
-    if len(path) == 6:
+    if len(path) == TARGET_NUMBERS:
         yield path
         return
 
