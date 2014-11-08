@@ -44,7 +44,7 @@ def int_to_roman(num):
     for value, letter in sorted(letters.items(), key=lambda x: x[0], reverse=True):
         # print(letter, value)
         while num >= value:
-            print(letter)
+            # print(letter)
             roman_numeral += letter
             num -= value
 
@@ -57,7 +57,7 @@ def test(original, expected):
     if (simplify_roman(original) == expected):
         print(original, "passed")
     else:
-        print(original, "FAILED")
+        print("FAILED:  ", original)
         print("Expected:", expected)
         print("Got:     ", simplify_roman(original))
         print()
@@ -66,23 +66,18 @@ def unit_tests():
     print(roman_to_int("MMMCDLXXXVII") == 3487)
     print(roman_to_int("MMMCDLXXXVII"))
     print(int_to_roman(3487))
-    # test("MMMCDLXXXVII", "MMMDLXXXVII")
+    test("MMMCDLXXXVII", "MMMDLXXXVII")
 
 def main():
-    # print
-
     unit_tests()
     return
 
     roman_numerals = re.findall("(\w+)", open("p089_roman.txt").read())
-    for original, simplified in ((roman_numeral, simplify_roman(roman_numeral)) for roman_numeral in roman_numerals):
-        print(original, simplified)
+    # for original, simplified in ((roman_numeral, simplify_roman(roman_numeral)) for roman_numeral in roman_numerals):
+        # print(original, simplified)
     answer = sum(len(simplify_roman(roman_numeral) )
                  for roman_numeral in roman_numerals)
     print(answer)
-    # print(roman_numerals)
-    # print(simplify_roman("MMMDLXVIIII"))
-    # print(simplify_roman("XXXXVIIII"))
 
 if __name__ == '__main__':
     main()
