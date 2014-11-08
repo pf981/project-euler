@@ -7,8 +7,8 @@ def simplify_roman(original):
     substitutions = ((r'IIII', 'IV'), (r'VIV', 'IX'), (r'XXXX', 'XL'),
                      (r'LXL', 'XC'), (r'CCCC', 'CD'), (r'DCD', 'CM'))
 
-    for regex, replace in substitutions: original = re.sub(regex, replace,
-        original)
+    for regex, replace in substitutions:
+        original = re.sub(regex, replace, original)
 
     return original
 
