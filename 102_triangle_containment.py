@@ -1,3 +1,5 @@
+# This code uses the determinant to determine what side of a line the origin
+# is on.
 def read_triangles():
     triangles = []
     for line in open("p102_triangles.txt"):
@@ -15,9 +17,16 @@ def determinant(p1, p2, p3):
 
 def contains_origin(triangle):
     origin = (0, 0)
+
+    # For each edge, find what side the point lies on
+    # The determinant will be positive if the points are on one side, negative
+    # if they are on the other and zero if they are on the line.
     det1 = determinant(origin, triangle[0], triangle[1]) < 0
     det2 = determinant(origin, triangle[1], triangle[2]) < 0
     det3 = determinant(origin, triangle[2], triangle[0]) < 0
+
+    # If the point is on the same side of every line, the triangle contains
+    # the origin
     return det1 == det2 == det3
 
 def main():
