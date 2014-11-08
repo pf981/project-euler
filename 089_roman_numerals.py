@@ -27,7 +27,9 @@ def roman_to_int(roman):
     total_values = 0
     prev_values = 0
 
+    # print(list(roman))
     for character in reversed(roman):
+        # print("#", character)
         # If this number is >= it's predescessor (reversed)
         if values[character] >= prev_values:
             total_values += values[character]
@@ -63,19 +65,26 @@ def test(original, expected):
         print()
 
 def unit_tests():
-    print(roman_to_int("MMMCDLXXXVII") == 3487)
-    print(roman_to_int("MMMCDLXXXVII"))
-    print(int_to_roman(3487))
-    test("MMMCDLXXXVII", "MMMDLXXXVII")
+    test("XLVIIII", "XLIX")
+    # print(roman_to_int("MMMCDLXXXVII") == 3487)
+    # print(roman_to_int("MMMCDLXXXVII"))
+    # print(int_to_roman(3487))
+    # test("MMMCDLXXXVII", "MMMCDLXXXVII")
 
 def main():
-    unit_tests()
-    return
+    # unit_tests()
+    # return
 
     roman_numerals = re.findall("(\w+)", open("p089_roman.txt").read())
-    # for original, simplified in ((roman_numeral, simplify_roman(roman_numeral)) for roman_numeral in roman_numerals):
-        # print(original, simplified)
-    answer = sum(len(simplify_roman(roman_numeral) )
+
+    # for roman_numeral in roman_numerals:
+    #     if len(roman_numeral) <= len(simplify_roman(roman_numeral)):
+    #         print(roman_numeral)
+    #         print(simplify_roman(roman_numeral), roman_to_int(roman_numeral))
+    #         print()
+
+
+    answer = sum(len(roman_numeral) - len(simplify_roman(roman_numeral))
                  for roman_numeral in roman_numerals)
     print(answer)
 
