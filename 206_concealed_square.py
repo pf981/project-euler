@@ -1,3 +1,6 @@
+# This was my first attempt at this problem and it used brute force. It works,
+# but takes several minutes to complete. A more efficient version is in
+# 206_concealed_square2.py
 import itertools
 import math
 
@@ -5,31 +8,21 @@ import math
 LOWER_BOUND = 1010101010
 UPPER_BOUND = 1389026623
 
-# 9_0
-# (a + b)^2 = a^2 + ab + b^2
-
 def is_square(num):
     root = math.sqrt(num)
     return root == int(root)
 
 def main():
-    # print(is_square(25))
-    # print(is_square(24))
-    # for num in range(100):
-    #     print(num, num*num)
+    ## This was my first attempt which searched for all candidates
+    # for num in range(LOWER_BOUND, UPPER_BOUND+1):
+    #     print(num)
+    #     if re.match('1.2.3.4.5.6.7.8.9.0', str(num*num)):
+    #         answer = num
+    #         break
+    # print(answer)
     # return
-    # for num in range(LOWER_BOUND, UPPER_BOUND+1):
-    #     print(num)
-    #     if re.match('1.2.3.4.5.6.7.8.9.0', str(num*num)):
-    #         answer = num
-    #         break
 
-    # for num in range(LOWER_BOUND, UPPER_BOUND+1):
-    #     print(num)
-    #     if re.match('1.2.3.4.5.6.7.8.9.0', str(num*num)):
-    #         answer = num
-    #         break
-
+    ## This is my second attempt which searched for all squares
     # Maybe would be quicker if reversed range
     # Generate all the in-between numbers that go in the gaps
     for in_betweens in range(10**11):
@@ -40,7 +33,6 @@ def main():
 
         # Flatten the list of tuples of strings into an int
         candidate_square = int(''.join(itertools.chain(*candidate_square_list)))
-
 
         if is_square(candidate_square):
             answer = math.sqrt(candidate_square)
