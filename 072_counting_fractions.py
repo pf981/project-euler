@@ -21,19 +21,23 @@ import fractions
 # 6: 1/2 1/3 2/3 1/4 *2/4 3/4 1/5 2/5 3/5 4/5 1/6 *2/6 *3/6 *4/6 5/6
 # 7: 1/2 1/3 2/3 1/4 *2/4 3/4 1/5 2/5 3/5 4/5 1/6 *2/6 *3/6 *4/6 5/6 1/7 2/7 3/7 4/7 5/7 6/7
 # 8: 1/2 1/3 2/3 1/4 *2/4 3/4 1/5 2/5 3/5 4/5 1/6 *2/6 *3/6 *4/6 5/6 1/7 2/7 3/7 4/7 5/7 6/7 1/8 *2/8 3/8 *4/8 5/8 *6/8 7/8
+# 9: 1/2 1/3 2/3 1/4 *2/4 3/4 1/5 2/5 3/5 4/5 1/6 *2/6 *3/6 *4/6 5/6 1/7 2/7 3/7 4/7 5/7 6/7 1/8 *2/8 3/8 *4/8 5/8 *6/8 7/8 1/9 2/9 *3/9 4/9 5/9 *6/9 7/9 8/9
 
 
-MAX_DENOMINATOR = 8
+# MAX_DENOMINATOR = 1000000
+MAX_DENOMINATOR = 9
 # PRIMES = set(sympy.sieve.primerange(2, MAX_DENOMINATOR))
 
 # Maybe I just want prime factors
 def non_trivial_divisors(n):
     # All the divisors except 1 and n
-    return sympy.ntheory.divisors(n)[1:-1]
+#    return sympy.ntheory.divisors(n)[1:-1]
+    return sympy.ntheory.primefactors(n)
 
 def main():
     answer = 0
     for denominator in range(2, MAX_DENOMINATOR + 1):
+
         answer = 0 # FIXME: REMOVE
         answer += denominator - 1
 
@@ -46,7 +50,7 @@ def main():
         print(denominator, answer)
         # print(denominator, denominator - len(sympy.ntheory.divisors(denominator)) + 1)
         # print(sympy.ntheory.divisors(denominator))
-        print(non_trivial_divisors(denominator))
+        # print(non_trivial_divisors(denominator))
         # print()
         # answer += denominator - len(sympy.ntheory.divisors(denominator)) + 1
         # print(denominator, denominator - len(sympy.ntheory.divisors(denominator)) + 1)
