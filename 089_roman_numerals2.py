@@ -3,14 +3,14 @@ import re
 # Note that this doesn't put the characters in the correct order, it just does
 # the substitutions. The correct order is not needed as we are only interested
 # in counting how many characters there are
-def simplify_roman(original):
+def simplify_roman(roman_numeral):
     substitutions = ((r'IIII', 'IV'), (r'VIV', 'IX'), (r'XXXX', 'XL'),
                      (r'LXL', 'XC'), (r'CCCC', 'CD'), (r'DCD', 'CM'))
 
     for regex, replace in substitutions:
-        original = re.sub(regex, replace, original)
+        roman_numeral = re.sub(regex, replace, roman_numeral)
 
-    return original
+    return roman_numeral
 
 def main():
     roman_numerals = re.findall("(\w+)", open("p089_roman.txt").read())
