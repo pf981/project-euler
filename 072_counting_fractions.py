@@ -1,3 +1,7 @@
+# This code will work, but it is too inefficient (will take an hour to run
+# probably). A better solution is implemented in 072_counting_fractions2.py
+# which uses a totient sieve.
+#
 # The number of extra fractions each denominator gives (that wasn't provided
 # by the previous denominators) is equal to d-1 if d is prime. If d is not
 # prime, it is equal to d - 1 - numbers_share_factors_with_d_less_than_d.
