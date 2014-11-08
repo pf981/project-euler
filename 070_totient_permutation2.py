@@ -19,8 +19,11 @@ def is_permutation(a, b):
     return sorted(str(a)) == sorted(str(b))
 
 def main():
+    # Find p, q that minimises p*q / ((p-1)(q-1))
     best_pair = min(((p, q) for p in PRIMES for q in PRIMES),
                     key=lambda p,q: p*q/((p-1)*(q-1)))
+
+    # n = p*q
     answer = best_pair[0] * best_pair[1]
     print(answer)
 
