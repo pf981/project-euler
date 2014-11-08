@@ -8,6 +8,7 @@ values['L'] = 50
 values['X'] = 10
 values['V'] = 5
 values['I'] = 1
+
 letters = {}
 letters[1000] = 'M'
 letters[900] = 'CM'
@@ -27,9 +28,7 @@ def roman_to_int(roman):
     total_values = 0
     prev_values = 0
 
-    # print(list(roman))
     for character in reversed(roman):
-        # print("#", character)
         # If this number is >= it's predescessor (reversed)
         if values[character] >= prev_values:
             total_values += values[character]
@@ -44,9 +43,7 @@ def int_to_roman(num):
 
     # Put in all 1000s, then 900s then 500s then 400s etc.
     for value, letter in sorted(letters.items(), key=lambda x: x[0], reverse=True):
-        # print(letter, value)
         while num >= value:
-            # print(letter)
             roman_numeral += letter
             num -= value
 
@@ -55,34 +52,8 @@ def int_to_roman(num):
 def simplify_roman(original):
     return int_to_roman(roman_to_int(original))
 
-def test(original, expected):
-    if (simplify_roman(original) == expected):
-        print(original, "passed")
-    else:
-        print("FAILED:  ", original)
-        print("Expected:", expected)
-        print("Got:     ", simplify_roman(original))
-        print()
-
-def unit_tests():
-    test("XLVIIII", "XLIX")
-    # print(roman_to_int("MMMCDLXXXVII") == 3487)
-    # print(roman_to_int("MMMCDLXXXVII"))
-    # print(int_to_roman(3487))
-    # test("MMMCDLXXXVII", "MMMCDLXXXVII")
-
 def main():
-    # unit_tests()
-    # return
-
     roman_numerals = re.findall("(\w+)", open("p089_roman.txt").read())
-
-    # for roman_numeral in roman_numerals:
-    #     if len(roman_numeral) <= len(simplify_roman(roman_numeral)):
-    #         print(roman_numeral)
-    #         print(simplify_roman(roman_numeral), roman_to_int(roman_numeral))
-    #         print()
-
 
     answer = sum(len(roman_numeral) - len(simplify_roman(roman_numeral))
                  for roman_numeral in roman_numerals)
