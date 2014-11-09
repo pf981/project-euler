@@ -126,8 +126,11 @@ def is_palindrome(num):
     return str(num) == str(num)[::-1]
 
 
-def min_ignore_none(nums):
-    without_nones = [n for n in nums if n is not None]
-    if not without_nones:
-        return 0
-    return min(without_nones)
+# def min_of_not_none(*args):
+#     """
+#     Returns the minimum of the arguments, ignoring None values. If all are
+#     None, None will be returned
+#     """
+#     if all(element is None for element in args):
+#         return None
+#     return min(element for element in args if element != None)
