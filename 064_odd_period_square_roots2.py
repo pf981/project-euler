@@ -1,4 +1,4 @@
-import math
+import decimal
 # http://mathworld.wolfram.com/ContinuedFraction.html
 #     a_0 = floor(x)
 #     r_0 = x
@@ -22,13 +22,16 @@ import math
 #         sqrt(n) = [a_0; (a_1, ..., a_n, 2a_0)]
 # So, we know that it must be periodic between a_0 and a_k such that a_k =
 # 2*a_0. That is, the period is k such that a_k = 2*a_0.
-MAX_ROOT = 10000
+# FIXME: Something is up with 139... What is special about 139???
+#MAX_ROOT = 139
+MAX_ROOT = 13
+# MAX_ROOT = 10000
 
 def total_odd_periods():
     total_odd_periods = 0
 
     for n in range(2, MAX_ROOT+1):
-        x = math.sqrt(n)
+        x = decimal.Decimal(n).sqrt()
 
         # If it isn't an irrational square root, we aren't interested
         # Note that for all integers, a, sqrt(a) is either an integer or
@@ -38,7 +41,7 @@ def total_odd_periods():
             continue
 
         # a_0 = floor(x)
-        a_0 = math.floor(x)
+        a_0 = x.to_integral_exact(rounding=decimal.ROUND_FLOOR)
         a_n = a_0
 
         # r_0 = x
@@ -47,11 +50,17 @@ def total_odd_periods():
         period_length = 0
         # x is periodic about a_0 and 2*a_0
         while a_n != 2 * a_0:
+            # FIXME:
+            # mathworld(statement 41) states that 0 < a_n < 2*sqrt(n) for all n<k
+            # If the below condition is satisfied, something bad has happened...
+            if a_n > 2*x:
+                print("SOMETHING STRANGE HAPPENED", n, a_n, a_0)
+
             # r_n = 1 / (r_{n-1} - a_{n-1})
             r_n = 1 / (r_n - a_n)
 
             # a_n = floor(r_n)
-            a_n = math.floor(r_n)
+            a_n = r_n.to_integral_exact(rounding=decimal.ROUND_FLOOR)
 
             period_length += 1
         # print("sqrt({0}) [{1}; {2}]".format(n, a_0_, tuple(a[1:])))
