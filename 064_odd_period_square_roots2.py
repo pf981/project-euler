@@ -24,15 +24,17 @@ import decimal
 # 2*a_0. That is, the period is k such that a_k = 2*a_0.
 # FIXME: Something is up with 139... What is special about 139???
 #MAX_ROOT = 139
-MAX_ROOT = 13
-# MAX_ROOT = 10000
+# MAX_ROOT = 13
+MAX_ROOT = 10000
 
 def total_odd_periods():
     total_odd_periods = 0
 
+    decimal.getcontext().prec = 1000
     for n in range(2, MAX_ROOT+1):
         x = decimal.Decimal(n).sqrt()
-
+        # print(x)
+        # return
         # If it isn't an irrational square root, we aren't interested
         # Note that for all integers, a, sqrt(a) is either an integer or
         # irrational. So this means, every x that does not satisfy this if
@@ -64,7 +66,7 @@ def total_odd_periods():
 
             period_length += 1
         # print("sqrt({0}) [{1}; {2}]".format(n, a_0_, tuple(a[1:])))
-        # print("sqrt", n)
+        print("sqrt", n)
 
         # Note that the periodic elements are a[1:]. a[0] is the first value
         # that is not part of the period
