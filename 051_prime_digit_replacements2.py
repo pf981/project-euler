@@ -20,7 +20,7 @@ def compute_eight_prime():
     for prime in PRIMES:
         candidate = str(prime)
 
-        # If it has a digit which is repeated 3 times that is 0, 1 or 2
+        # If it has a digit which is repeated 3 times
         # then we should check it's family. If it has a family of 8
         if any(candidate.count(repeated_digit) == 3 and compute_family(candidate, repeated_digit) == 8
                for repeated_digit in '0123456789'):
