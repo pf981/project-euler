@@ -22,19 +22,23 @@ import decimal
 #         sqrt(n) = [a_0; (a_1, ..., a_n, 2a_0)]
 # So, we know that it must be periodic between a_0 and a_k such that a_k =
 # 2*a_0. That is, the period is k such that a_k = 2*a_0.
-# FIXME: Something is up with 139... What is special about 139???
-#MAX_ROOT = 139
-# MAX_ROOT = 13
 MAX_ROOT = 10000
 
 def total_odd_periods():
     total_odd_periods = 0
 
+    # Note that if we use math.sqrt instead of Decimal.sqrt, we get rounding
+    # errors that result in the incorrect result. I tried sympy (symbolic
+    # sqrt), but that was too slow. We don't need the calculation to be exact,
+    # but we need it to be better than what math.sqrt was giving. Even 100
+    # decimal places resulted in errors. However, 100 decimal places gave the
+    # correct answer. Some potential significant rounding errors are detected
+    # in an if statement further down.
     decimal.getcontext().prec = 1000
+
     for n in range(2, MAX_ROOT+1):
         x = decimal.Decimal(n).sqrt()
-        # print(x)
-        # return
+
         # If it isn't an irrational square root, we aren't interested
         # Note that for all integers, a, sqrt(a) is either an integer or
         # irrational. So this means, every x that does not satisfy this if
@@ -52,11 +56,15 @@ def total_odd_periods():
         period_length = 0
         # x is periodic about a_0 and 2*a_0
         while a_n != 2 * a_0:
-            # FIXME:
-            # mathworld(statement 41) states that 0 < a_n < 2*sqrt(n) for all n<k
-            # If the below condition is satisfied, something bad has happened...
+            # I was getting the incorrect result as my decimal precision was
+            # not sufficient. To detect when it was insufficient, I used the
+            # below check. It is based off:
+            #     http://mathworld.wolfram.com/ContinuedFraction.html
+            # Statement 41 in the mathworld link states that 0 < a_n < 2*sqrt(n) for all n<k
+            # The check below checks if this condition has been violated. If
+            # it has, it is certainly due to rounding errors
             if a_n > 2*x:
-                print("SOMETHING STRANGE HAPPENED", n, a_n, a_0)
+                print("ERROR: a_n > 2sqrt(n). Increase decimal precision to resolve this issue.", n, x, a_n, a_0)
 
             # r_n = 1 / (r_{n-1} - a_{n-1})
             r_n = 1 / (r_n - a_n)
@@ -65,11 +73,9 @@ def total_odd_periods():
             a_n = r_n.to_integral_exact(rounding=decimal.ROUND_FLOOR)
 
             period_length += 1
-        # print("sqrt({0}) [{1}; {2}]".format(n, a_0_, tuple(a[1:])))
+        # This print is just so we can keep track of the program's progress
         print("sqrt", n)
 
-        # Note that the periodic elements are a[1:]. a[0] is the first value
-        # that is not part of the period
         # If the period is odd
         if period_length % 2 == 1:
             total_odd_periods += 1
