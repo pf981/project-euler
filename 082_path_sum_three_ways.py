@@ -10,8 +10,13 @@ MATRIX = np.array([[131, 673, 234, 103, 18],
                    [805, 732, 524, 37, 331]])
 
 def set_best_distance(row, col, best_distances, matrix):
-    # Compute the cells down
+    """
+    Sets best_distances[row][col] to the best distance from (row, col) to the
+    far right of the matrix when allowed to move right, up or down
+    """
+    # For all cells below this one, starting from the lowest first
     for down_row in reversed(range(row+1, matrix.shape[0])):
+        # Compute the best distance without allowing going up
         set_best_distance_no_up(down_row, col, best_distances, matrix)
 
     right = best_distances[row][col + 1]
@@ -22,6 +27,11 @@ def set_best_distance(row, col, best_distances, matrix):
     best_distances[row][col] = matrix[row][col] + lists.min_of_not_none(right, up, down)
 
 def set_best_distance_no_up(row, col, best_distances, matrix):
+    """
+    Sets best_distances[row][col] to the best distance from (row, col) to the
+    far right of the matrix when allowed to move right or down. Note that this
+    excludes the ability to go up
+    """
     right = best_distances[row][col + 1]
     down = best_distances[row+1][col] if row < matrix.shape[0]-1 else None
 
