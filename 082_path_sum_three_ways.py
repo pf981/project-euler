@@ -19,7 +19,7 @@ def set_best_distance(row, col, best_distances, matrix):
     best_distances[row][col] = matrix[row][col] + min(right, up, down)
 
 def set_best_distance_no_up(row, col, best_distances, matrix):
-    print("@", row, col)
+    # print("@", row, col)
     right = best_distances[row][col + 1]
     down = best_distances[row+1][col] if row < matrix.shape[0]-1 else 99999999999999 # FIXME: HACK
 
@@ -39,9 +39,9 @@ def length_of_shortest_path(matrix):
     for col in reversed(range(matrix.shape[1]-1)):
         for row in range(matrix.shape[0]):
             set_best_distance(row, col, best_distances, matrix)
-            print(row, col)
-            print(best_distances)
-            print()
+            # print(row, col)
+            # print(best_distances)
+            # print()
             # best_distances[row][col] = best_distance(row,
             #                                                col,
             #                                                best_distances,
@@ -59,14 +59,14 @@ def length_of_shortest_path(matrix):
             #                                                           best_distances,
             #                                                           matrix)])
 
-    print(best_distances)
+    # print(best_distances)
 
     # The shortest path is the minimum of the first column of best distances
     return min(best_distances[:,0])
 
 def main():
-    matrix = MATRIX
-    # matrix = np.loadtxt("p083_matrix.txt", dtype=int, delimiter=',')
+    # matrix = MATRIX
+    matrix = np.loadtxt("p082_matrix.txt", dtype=int, delimiter=',')
     answer = length_of_shortest_path(matrix)
     print(answer)
 
