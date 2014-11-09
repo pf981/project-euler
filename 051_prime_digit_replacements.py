@@ -1,3 +1,4 @@
+# This is a mess and doesn't work. See the proper solution in 051_prime_digit_replacements2.py
 # from sympy import sieve
 import itertools
 import re
