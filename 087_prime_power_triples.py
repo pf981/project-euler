@@ -12,7 +12,6 @@ def main():
 
     # For all combinations of square prime, cube prime and fourth prime power
     for square in squares:
-        print(square)
         for cube in cubes:
             for fourth in fourths:
                 # Compute the sum
