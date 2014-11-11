@@ -8,13 +8,18 @@ GONS = 3
 # The ring contains values 1 to MAX_VALUE
 MAX_VALUE = GONS * 2
 
-# FIXME: These don't necessarily add to 9!!!
-def generate_all_triples():
+def generate_all_triples(list_sum):
     for first in range(1, MAX_VALUE+1):
         for second in set(range(1, MAX_VALUE+1)) - set([first]):
             for third in set(range(1, MAX_VALUE+1)) - set([first, second]):
-                if first + second + third == 9:
+                if first + second + third == list_sum:
                     yield (first, second, third)
+# def generate_all_triples():
+#     for first in range(1, MAX_VALUE+1):
+#         for second in set(range(1, MAX_VALUE+1)) - set([first]):
+#             for third in set(range(1, MAX_VALUE+1)) - set([first, second]):
+#                 if first + second + third == 9:
+#                     yield (first, second, third)
 
 # FIXME: Remove duplicates
 def generate_lines(used_lines, triples, num_lines):
@@ -50,26 +55,22 @@ def simplify(ring):
     Rotates the ring such that the smallest tuple is first
     """
     index_of_smallest_tuple = min(enumerate(ring), key=operator.itemgetter(1))[0]
-    # index_of_smallest_tuple = min(enumerate(ring), key=lambda x: x[1])[0]
-    # print("i=", index_of_smallest_tuple)
+
     ring = collections.deque(ring)
     ring.rotate(-index_of_smallest_tuple)
 
     return tuple(ring)
 
 def generate_rings():
-    # Generate all triples that add to 9
-    triples = list(generate_all_triples())
+    rings = set()
+    for line_sum in range(30):
+        # Generate all triples that add to 9
+        triples = list(generate_all_triples(line_sum))
 
-    rings = set(simplify(ring) for ring in generate_lines([], triples, GONS))
+        rings |= set(simplify(ring) for ring in generate_lines([], triples, GONS))
     return rings
 
 def main():
-    # print(min([(6, 1, 2), (4, 2, 3), (5, 3, 1)]))
-    # print(simplify([(6, 1, 2), (4, 2, 3), (5, 3, 1)]))
-    # print(simplify([(6,2,1), (5,1,3), (4,3,2)]))
-    # return
-    # FIXME: Remove duplicates
     for ring in generate_rings():
         for line in ring:
             print("{0},{1},{2};".format(*line), end="")
