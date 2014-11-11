@@ -1,3 +1,8 @@
+# This implementation can solve a generalised n-gon ring. It is very efficient
+# as it generates all valid lines and only adds lines to the ring that keep
+# the ring valid. However, it is difficult to read. A less efficient and less
+# generalised, but more readable solution can be found in
+# 068_magic_5-gon_ring2.py
 import collections
 import itertools
 import operator

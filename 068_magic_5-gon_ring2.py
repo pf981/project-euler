@@ -1,5 +1,9 @@
 # This is a clearer (but less generalised) version based off the c++ code in
 # https://projecteuler.net/thread=68;page=8
+#
+# Version 1 is more efficient as it only checks valid lines, whereas this
+# approach uses brute force. However, this implementation is much easier to
+# read.
 import collections
 import itertools
 import operator
