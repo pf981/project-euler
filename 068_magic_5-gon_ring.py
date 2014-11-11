@@ -3,7 +3,7 @@ import itertools
 import operator
 
 # "Magic" 3-gon ring
-GONS = 3
+GONS = 5
 
 # The ring contains values 1 to MAX_VALUE
 MAX_VALUE = GONS * 2
@@ -14,14 +14,7 @@ def generate_all_triples(list_sum):
             for third in set(range(1, MAX_VALUE+1)) - set([first, second]):
                 if first + second + third == list_sum:
                     yield (first, second, third)
-# def generate_all_triples():
-#     for first in range(1, MAX_VALUE+1):
-#         for second in set(range(1, MAX_VALUE+1)) - set([first]):
-#             for third in set(range(1, MAX_VALUE+1)) - set([first, second]):
-#                 if first + second + third == 9:
-#                     yield (first, second, third)
 
-# FIXME: Remove duplicates
 def generate_lines(used_lines, triples, num_lines):
     if num_lines == 0:
         yield used_lines
@@ -39,11 +32,17 @@ def generate_lines(used_lines, triples, num_lines):
                 continue
 
             # Ensure the last value of this line is second value of the line two back
-            if len(used_lines) >= 2 and line[2] != used_lines[-2][1]:
+            # FIXME: I think this is good now
+            if len(used_lines) >= GONS-1 and line[2] != used_lines[-GONS+1][1]:
+            # if len(used_lines) >= 2 and line[2] != used_lines[-GONS+1][1]:
+            # if len(used_lines) >= 2 and line[2] != used_lines[-2][1]:
                 continue
 
-            # Ensure the last value is not in the previous line
-            if line[2] in used_lines[-1]:
+            # Ensure the last value is not in any previous lines # FIXME: Except one of them
+            # Count how many times line[2] occurs in used_lines. If the length is big, it should be 1, if the length is small, it should be 0. FIXME: This isn't fixed yet
+            if any(line[2] in used_lines[i] for i in range(1, min(GONS-2, len(used_lines)))):
+            # if any(line[2] in used_lines[i] for i in range(1, GONS-2)):
+            # if line[2] in used_lines[-1]:
                 continue
 
         # Recursively add all the next rings
@@ -71,14 +70,21 @@ def generate_rings():
     return rings
 
 def main():
-    for ring in generate_rings():
-        for line in ring:
-            print("{0},{1},{2};".format(*line), end="")
-        print()
+    # for ring in generate_rings():
+    #     for line in ring:
+    #         print("{0},{1},{2};".format(*line), end="")
+    #     print()
 
         # print(list(itertools.chain(*ring)))
     # answer = max(int(''.join(ring)) for ring in generate_rings())
-    # print(answer)
+    # answer = max(int(''.join(str(s) for s in ring)) for ring in generate_rings())
+    # for ring in generate_rings():
+        # print(int(''.join(str(n) for n in itertools.chain(*ring))))
+    answer = max(int(''.join(str(n) for n in itertools.chain(*ring)))
+                 for ring in generate_rings())
+
+    # FIXME: Something is wrong with the validation. There should only be a maximum of two of any value, but this finds one with three tens
+    print(answer)
 
 if __name__ == '__main__':
     main()
