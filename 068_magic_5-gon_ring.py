@@ -45,26 +45,30 @@ def generate_lines(used_lines, triples, num_lines):
         for ring in generate_lines(used_lines + [line], triples, num_lines-1):
             yield ring
 
-def generate_rings():
-    # Generate all triples that add to 9
-    triples = list(generate_all_triples())
-
-    rings = generate_lines([], triples, GONS)
-    return rings
-
 def simplify(ring):
     """
     Rotates the ring such that the smallest tuple is first
     """
     index_of_smallest_tuple = min(enumerate(ring), key=operator.itemgetter(1))[0]
-
+    # index_of_smallest_tuple = min(enumerate(ring), key=lambda x: x[1])[0]
+    # print("i=", index_of_smallest_tuple)
     ring = collections.deque(ring)
-    ring.rotate(index_of_smallest_tuple)
+    ring.rotate(-index_of_smallest_tuple)
 
-    return list(ring)
+    return tuple(ring)
+
+def generate_rings():
+    # Generate all triples that add to 9
+    triples = list(generate_all_triples())
+
+    rings = set(simplify(ring) for ring in generate_lines([], triples, GONS))
+    return rings
 
 def main():
-    print(simplify([(6, 1, 2), (4, 2, 3), (5, 3, 1)]))
+    # print(min([(6, 1, 2), (4, 2, 3), (5, 3, 1)]))
+    # print(simplify([(6, 1, 2), (4, 2, 3), (5, 3, 1)]))
+    # print(simplify([(6,2,1), (5,1,3), (4,3,2)]))
+    # return
     # FIXME: Remove duplicates
     for ring in generate_rings():
         for line in ring:
