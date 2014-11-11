@@ -1,4 +1,6 @@
+import collections
 import itertools
+import operator
 
 # "Magic" 3-gon ring
 GONS = 3
@@ -15,7 +17,7 @@ def generate_all_triples():
                     yield (first, second, third)
 
 # FIXME: Remove duplicates
-def generate_rings(used_lines, triples, num_lines):
+def generate_lines(used_lines, triples, num_lines):
     if num_lines == 0:
         yield used_lines
 
@@ -40,17 +42,35 @@ def generate_rings(used_lines, triples, num_lines):
                 continue
 
         # Recursively add all the next rings
-        for ring in generate_rings(used_lines + [line], triples, num_lines-1):
+        for ring in generate_lines(used_lines + [line], triples, num_lines-1):
             yield ring
 
-def main():
+def generate_rings():
     # Generate all triples that add to 9
     triples = list(generate_all_triples())
 
-    for ring in generate_rings([], triples, GONS):
+    rings = generate_lines([], triples, GONS)
+    return rings
+
+def simplify(ring):
+    """
+    Rotates the ring such that the smallest tuple is first
+    """
+    index_of_smallest_tuple = min(enumerate(ring), key=operator.itemgetter(1))[0]
+
+    ring = collections.deque(ring)
+    ring.rotate(index_of_smallest_tuple)
+
+    return list(ring)
+
+def main():
+    print(simplify([(6, 1, 2), (4, 2, 3), (5, 3, 1)]))
+    # FIXME: Remove duplicates
+    for ring in generate_rings():
         for line in ring:
             print("{0},{1},{2};".format(*line), end="")
         print()
+
         # print(list(itertools.chain(*ring)))
     # answer = max(int(''.join(ring)) for ring in generate_rings())
     # print(answer)
