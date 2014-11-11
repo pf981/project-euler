@@ -2,13 +2,17 @@ import collections
 import itertools
 import operator
 
-# "Magic" 3-gon ring
+# "Magic" 5-gon ring
 GONS = 5
 
 # The ring contains values 1 to MAX_VALUE
 MAX_VALUE = GONS * 2
 
 def generate_all_triples(list_sum):
+    """
+    Generates tuples of length three such that their values are 1 to MAX_VALUE
+    and their sum is list_sum
+    """
     for first in range(1, MAX_VALUE+1):
         for second in set(range(1, MAX_VALUE+1)) - set([first]):
             for third in set(range(1, MAX_VALUE+1)) - set([first, second]):
@@ -16,6 +20,12 @@ def generate_all_triples(list_sum):
                     yield (first, second, third)
 
 def is_valid_line(line, used_lines):
+    """
+    Returns true if line can be added to used_lines and still produce a valid
+    partial ring. False otherwise
+    """
+    # Warning: Dragons ahead
+
     # If it is the first line, then it must be valid
     if not used_lines:
         return True
@@ -27,16 +37,14 @@ def is_valid_line(line, used_lines):
         return False
 
     # Ensure the middle value of this line is the last value of the
-    # previous line
+    # previous line, and does not occor elsewhere
     if line[1] != used_lines[-1][2]:
         return False
     elif used_values_list.count(line[1]) > 1:
         return False
 
-    # FIXME: FIX BELOW, above should be fine
-    # Ensure the last value of this line is second value of the line two back
-    # if len(used_lines) >= GONS-1 and line[2] != used_lines[-GONS+1][1]:
-    #     return False
+    # Ensure the last value of this line is second value of a particular line,
+    # and does not occur elsewhere
     if len(used_lines) >= GONS-1:
         if line[2] != used_lines[-GONS+1][1]:
             return False
@@ -45,18 +53,16 @@ def is_valid_line(line, used_lines):
     elif used_values_list.count(line[2]) > 0:
         return False
 
-
-    # Ensure the last value is not in any previous lines # FIXME: Except one of them
-    # Count how many times line[2] occurs in used_lines. If the length is big, it should be 1, if the length is small, it should be 0. FIXME: This isn't fixed yet
+    # Ensure the last value is not in any previous lines (except the first line)
     if any(line[2] in used_lines[i] for i in range(1, min(GONS-2, len(used_lines)))):
-    # if any(line[2] in used_lines[i] for i in range(1, GONS-2)):
-    # if line[2] in used_lines[-1]:
         return False
 
     return True
 
-
 def generate_lines(used_lines, triples, num_lines):
+    """
+    Yields all possible rings as a list of triples where each triple represents a line
+    """
     if num_lines == 0:
         yield used_lines
 
@@ -81,6 +87,10 @@ def simplify(ring):
     return tuple(ring)
 
 def generate_rings():
+    """
+    Yields all simplified and unique rings as a list of tuples representing
+    the lines of the ring
+    """
     rings = set()
     for line_sum in range(30):
         # Generate all triples that add to 9
@@ -90,25 +100,18 @@ def generate_rings():
     return rings
 
 def main():
-    for ring in generate_rings():
-        for line in ring:
-            print("{0},{1},{2};".format(*line), end="")
-        print()
-
-        # print(list(itertools.chain(*ring)))
-    # answer = max(int(''.join(ring)) for ring in generate_rings())
-    # answer = max(int(''.join(str(s) for s in ring)) for ring in generate_rings())
-    # for ring in generate_rings():
-        # print(int(''.join(str(n) for n in itertools.chain(*ring))))
-    # answer = max(int(''.join(str(n) for n in itertools.chain(*ring)))
-    #              for ring in generate_rings())
     answer = 0
+
+    # Find the largest 16-digit ring
     for ring in generate_rings():
         for n in itertools.chain(*ring):
+            # Convert the list of tuples into an int
             chain_int = int(''.join(str(n) for n in itertools.chain(*ring)))
+
+            # We are looking for a sixteen digit number
             if len(str(chain_int)) == 16:
                 answer = max(answer, chain_int)
-    # FIXME: Something is wrong with the validation. There should only be a maximum of two of any value, but this finds one with three tens
+
     print(answer)
 
 if __name__ == '__main__':
